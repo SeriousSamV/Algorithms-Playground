@@ -15,12 +15,12 @@ endif()
 include(CTest)
 enable_testing()
 
-# region nullptr_fix
+#region nullptr_fix
 add_library(nullptr_fix INTERFACE src/nullptr_fix/nullptr_fix.h)
 target_include_directories(nullptr_fix INTERFACE src/nullptr_fix)
-# endregion nullptr_fix
+#endregion nullptr_fix
 
-# region linked_list_lib
+#region linked_list_lib
 add_library(linked_list_lib STATIC
         src/data_structures/linked_list/linked_list_lib.c
         src/data_structures/linked_list/linked_list_lib.h)
@@ -34,9 +34,9 @@ target_link_libraries(assert_linked_list_lib
         nullptr_fix)
 
 add_test(test_linked_list_lib assert_linked_list_lib)
-# endregion linked_list_lib
+#endregion linked_list_lib
 
-# region doubly_linked_list_lib
+#region doubly_linked_list_lib
 add_library(doubly_linked_list_lib
         src/data_structures/doubly_linked_list/doubly_linked_list_lib.c
         src/data_structures/doubly_linked_list/doubly_linked_list_lib.h)
@@ -51,4 +51,17 @@ target_link_libraries(assert_doubly_linked_list_lib
         nullptr_fix)
 
 add_test(test_doubly_linked_list_lib assert_doubly_linked_list_lib)
-# endregion doubly_linked_list_lib
+#endregion doubly_linked_list_lib
+
+#region vector_lib
+add_library(vector_lib STATIC
+        src/data_structures/vector/vector_lib.c
+        src/data_structures/vector/vector_lib.h)
+target_include_directories(vector_lib PUBLIC src/data_structures/vector)
+target_link_libraries(vector_lib PRIVATE nullptr_fix)
+
+add_executable(assert_vector_lib test/assert_vector_lib.c)
+target_link_libraries(assert_vector_lib vector_lib nullptr_fix)
+
+add_test(test_vector_lib assert_vector_lib)
+#endregion vector_lib
