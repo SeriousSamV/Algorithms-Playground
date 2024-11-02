@@ -22,7 +22,7 @@ vector *vector_create(const size_t capacity, const size_t elem_size) {
 }
 
 bool check_and_resize(vector *vector, const size_t capacity_need) {
-    if (capacity_need > SIZE_MAX) {
+    if (capacity_need > 1024 * 64) { // 64MB
         perror("capacity need is greater than SIZE_MAX");
         return false;
     }
