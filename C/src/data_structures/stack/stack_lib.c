@@ -4,7 +4,7 @@
 
 #include <stack_lib.h>
 #include <stdlib.h>
-
+#include <nullptr_fix.h>
 
 stack *stack_create(const size_t initial_capacity, const size_t element_size) {
     stack *stack = calloc(1, sizeof(struct stack));
