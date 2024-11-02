@@ -65,3 +65,18 @@ target_link_libraries(assert_vector_lib vector_lib nullptr_fix)
 
 add_test(test_vector_lib assert_vector_lib)
 #endregion vector_lib
+
+#region stack_lib
+add_library(stack_lib STATIC
+        src/data_structures/stack/stack_lib.c
+        src/data_structures/stack/stack_lib.h)
+target_include_directories(stack_lib PUBLIC src/data_structures/stack)
+target_link_libraries(stack_lib
+        PUBLIC vector_lib
+        PRIVATE nullptr_fix)
+
+add_executable(assert_stack_lib test/assert_stack_lib.c)
+target_link_libraries(assert_stack_lib stack_lib nullptr_fix)
+
+add_test(test_stack_lib assert_stack_lib)
+#endregion stack_lib
