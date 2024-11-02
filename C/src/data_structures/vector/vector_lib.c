@@ -74,6 +74,20 @@ vector_insert_elem_result vector_insert_elem_at(
     return VECTOR_INSERT_OK;
 }
 
+void *vector_get_elem_at(const vector *vector, const size_t index) {
+    if (vector == nullptr) {
+        fprintf(stderr, "cannot get element at null vector\n");
+        fflush(stderr);
+        return nullptr;
+    }
+    if (vector->num_elements <= index) {
+        fprintf(stderr, "index out of bounds\n");
+        fflush(stderr);
+        return nullptr;
+    }
+    return vector->data_buffer + (index * vector->elem_size);
+}
+
 void vector_destroy(vector *vector) {
     free(vector->data_buffer);
     free(vector);

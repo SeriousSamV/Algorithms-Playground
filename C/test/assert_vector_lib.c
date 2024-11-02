@@ -78,9 +78,23 @@ void test_vector_insert_elem_at() {
     vector_destroy(int_vec);
 }
 
+void test_vector_get_elem_at() {
+    vector *int_vec = vector_create(5, sizeof(int));
+    const int arr[] = {1, 2, 3, 4, 5};
+    for (int i = 0; i < sizeof(arr) / sizeof(arr[0]); i++) {
+        vector_append_elem(int_vec, &arr[i]);
+    }
+    for (int i = 0; i < sizeof(arr) / sizeof(arr[0]); i++) {
+        const int elem = *((int *)vector_get_elem_at(int_vec, i));
+        assert(elem == arr[i]);
+    }
+    vector_destroy(int_vec);
+}
+
 int main() {
     test_vector_create_and_append();
     test_vector_insert_elem_at();
+    test_vector_get_elem_at();
 
     return EXIT_SUCCESS;
 }

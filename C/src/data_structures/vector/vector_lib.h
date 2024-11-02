@@ -35,7 +35,7 @@ vector_insert_elem_result vector_insert_elem_at(
     const void *data,
     const size_t index);
 
-void *vector_get_elem_at(const vector **vector_ref, const size_t index);
+void *vector_get_elem_at(const vector *vector, const size_t index);
 
 void vector_destroy(vector *vector);
 
