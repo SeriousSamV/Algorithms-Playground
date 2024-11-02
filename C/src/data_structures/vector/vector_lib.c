@@ -22,16 +22,22 @@ vector *vector_create(const size_t capacity, const size_t elem_size) {
 }
 
 bool check_and_resize(vector *vector, const size_t capacity_need) {
-    if (vector->capacity < capacity_need) {
-        const size_t new_capacity = vector->capacity * 2;
-        void *new_buffer = realloc(vector->data_buffer, new_capacity * vector->elem_size);
-        if (new_buffer == nullptr) {
-            perror("cannot alloc mem for vec");
-            return false;
-        }
-        vector->data_buffer = new_buffer;
-        vector->capacity = new_capacity;
+    if (capacity_need > SIZE_MAX) {
+        perror("capacity need is greater than SIZE_MAX");
+        return false;
     }
+    if (vector->capacity >= capacity_need) {
+        return true;
+    }
+    const size_t new_capacity = vector->capacity * 2;
+    void *new_buffer = realloc(vector->data_buffer, new_capacity * vector->elem_size);
+    if (new_buffer == nullptr) {
+        perror("cannot alloc mem for vec");
+        return false;
+    }
+    vector->data_buffer = new_buffer;
+    vector->capacity = new_capacity;
+
     return true;
 }
 
