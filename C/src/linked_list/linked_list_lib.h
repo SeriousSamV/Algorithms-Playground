@@ -14,6 +14,6 @@ ll_node *ll_node_get_data(const ll_node *node);
 
 ll_node *ll_node_add(ll_node *out_node, const void *data);
 
-void ll_destroy_node(ll_node *node);
+void ll_destroy(ll_node *node);
 
 #endif //LINKED_LIST_LIB_H

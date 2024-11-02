@@ -20,7 +20,7 @@ void test_int_linked_list() {
         expected_data++;
         current = current->next;
     }
-    ll_destroy_node(root);
+    ll_destroy(root);
 }
 
 void test_string_linked_list() {
@@ -38,7 +38,7 @@ void test_string_linked_list() {
         expected_index++;
         current = current->next;
     }
-    ll_destroy_node(root);
+    ll_destroy(root);
 }
 
 int main() {

@@ -29,7 +29,7 @@ ll_node* ll_node_add(ll_node *out_node, const void *data) {
 }
 
 
-void ll_destroy_node(ll_node *node) {
+void ll_destroy(ll_node *node) {
     ll_node *curr = node;
     while (curr != nullptr) {
         ll_node *next = ll_node_get_next(curr);
