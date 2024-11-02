@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <assert.h>
-
+#include <nullptr_fix.h>
 #include <stack_lib.h>
 
 
