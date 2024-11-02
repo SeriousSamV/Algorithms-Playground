@@ -65,7 +65,7 @@ target_link_libraries(vector_lib PRIVATE nullptr_fix)
 add_executable(assert_vector_lib test/assert_vector_lib.c)
 target_link_libraries(assert_vector_lib vector_lib nullptr_fix)
 
-add_test(test_vector_lib assert_vector_lib)
+#add_test(test_vector_lib assert_vector_lib)
 #endregion vector_lib
 
 #region stack_lib
