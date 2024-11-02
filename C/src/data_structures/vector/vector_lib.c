@@ -19,6 +19,20 @@ vector *vector_create(const size_t capacity, const size_t elem_size) {
     return vector;
 }
 
+bool check_and_resize(vector *vector, const size_t capacity_need) {
+    if (vector->capacity < capacity_need) {
+        const size_t new_capacity = vector->capacity * 2;
+        void *new_buffer = realloc(vector->data_buffer, new_capacity * vector->elem_size);
+        if (new_buffer == nullptr) {
+            perror("cannot alloc mem for vec");
+            return false;
+        }
+        vector->data_buffer = new_buffer;
+        vector->capacity = new_capacity;
+    }
+    return true;
+}
+
 vector_append_elem_result vector_append_elem(vector **vector_ref, const void *data) {
     vector *vector = vector_ref != nullptr ? *vector_ref : nullptr;
     if (vector == nullptr) {
@@ -26,14 +40,8 @@ vector_append_elem_result vector_append_elem(vector **vector_ref, const void *da
         fflush(stderr);
         return VECTOR_APPEND_E_VEC_ARG_NULL;
     }
-    if (vector->num_elements == vector->capacity) {
-        const size_t new_capacity = vector->capacity * 2;
-        void *new_buffer = realloc(vector->data_buffer, new_capacity * vector->elem_size);
-        if (new_buffer == nullptr) {
-            perror("cannot alloc mem for vec");
-            return VECTOR_APPEND_E_MALLOC;
-        }
-        vector->data_buffer = new_buffer;
+    if (!check_and_resize(vector, vector->num_elements + 1)) {
+        return VECTOR_APPEND_E_VEC_ARG_NULL;
     }
     memcpy(vector->data_buffer + vector->num_elements * vector->elem_size, data, vector->elem_size);
     vector->num_elements++;

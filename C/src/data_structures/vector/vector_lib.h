@@ -18,7 +18,7 @@ vector *vector_create(const size_t capacity, const size_t elem_size);
 typedef enum vector_append_elem_result {
     VECTOR_APPEND_OK = 0,
     VECTOR_APPEND_E_VEC_ARG_NULL = 1,
-    VECTOR_APPEND_E_MALLOC = 2,
+    VECTOR_APPEND_E_RESIZE_FAILED = 2,
 } vector_append_elem_result;
 
 vector_append_elem_result vector_append_elem(vector **vector_ref, const void *data);
