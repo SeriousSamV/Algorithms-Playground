@@ -12,7 +12,7 @@ void test_int_linked_list() {
 
     const ll_node *current = root;
     int expected_data = 1;
-    while (current != nullptr) {
+    while (current != NULL) {
         assert(*(int *)current->data == expected_data);
         expected_data++;
         current = current->next;
