@@ -8,7 +8,8 @@
 
 
 vector *vector_create(const size_t capacity, const size_t elem_size) {
-    vector *vector = calloc(1, sizeof(struct vector));
+    // TODO: NOTE: lsan Direct leak of 32 byte(s) in 1 object(s) allocated
+    vector *vector = calloc(1, sizeof(struct vector)); // linked to realloc on `check_and_resize`
     vector->capacity = capacity;
     vector->num_elements = 0;
     vector->elem_size = elem_size;
@@ -22,7 +23,7 @@ vector *vector_create(const size_t capacity, const size_t elem_size) {
 }
 
 bool check_and_resize(vector *vector, const size_t capacity_need) {
-    if (capacity_need > 1024 * 64) { // 64MB
+    if (capacity_need > 1024 * 64) { // {64 * elem_sz} MB
         perror("capacity need is greater than SIZE_MAX");
         return false;
     }
@@ -30,6 +31,7 @@ bool check_and_resize(vector *vector, const size_t capacity_need) {
         return true;
     }
     const size_t new_capacity = vector->capacity * 2;
+    // TODO: NOTE: Indirect leak of 16 byte(s) in 1 object(s) allocated
     void *new_buffer = realloc(vector->data_buffer, new_capacity * vector->elem_size);
     if (new_buffer == nullptr) {
         perror("cannot alloc mem for vec");
