@@ -22,9 +22,9 @@ target_include_directories(nullptr_fix INTERFACE src/nullptr_fix)
 
 # region linked_list_lib
 add_library(linked_list_lib STATIC
-        src/linked_list/linked_list_lib.c
-        src/linked_list/linked_list_lib.h)
-target_include_directories(linked_list_lib PUBLIC src/linked_list)
+        src/data_structures/linked_list/linked_list_lib.c
+        src/data_structures/linked_list/linked_list_lib.h)
+target_include_directories(linked_list_lib PUBLIC src/data_structures/linked_list)
 target_link_libraries(linked_list_lib PRIVATE nullptr_fix)
 
 add_executable(assert_linked_list_lib
@@ -38,10 +38,10 @@ add_test(test_linked_list_lib assert_linked_list_lib)
 
 # region doubly_linked_list_lib
 add_library(doubly_linked_list_lib
-        src/doubly_linked_list/doubly_linked_list_lib.c
-        src/doubly_linked_list/doubly_linked_list_lib.h)
+        src/data_structures/doubly_linked_list/doubly_linked_list_lib.c
+        src/data_structures/doubly_linked_list/doubly_linked_list_lib.h)
 target_include_directories(doubly_linked_list_lib PUBLIC
-        src/doubly_linked_list)
+        src/data_structures/doubly_linked_list)
 target_link_libraries(doubly_linked_list_lib PRIVATE nullptr_fix)
 
 add_executable(assert_doubly_linked_list_lib
