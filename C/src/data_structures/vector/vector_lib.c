@@ -88,6 +88,26 @@ void *vector_get_elem_at(const vector *vector, const size_t index) {
     return vector->data_buffer + (index * vector->elem_size);
 }
 
+vector_remove_elem_result vector_remove_elem_at(vector *vector, size_t index) {
+    if (vector == nullptr) {
+        return VECTOR_REMOVE_ELEM_E_VEC_ARG_NULL;
+    }
+    if (vector->num_elements <= index) {
+        return VECTOR_REMOVE_ELEM_E_INDEX_OUT_OF_BOUNDS;
+    }
+    if (vector->num_elements == index + 1) {
+        memset((char *) vector->data_buffer + index * vector->elem_size, 0, vector->elem_size);
+        vector->num_elements--;
+        return VECTOR_REMOVE_ELEM_OK;
+    }
+    memmove((char *) vector->data_buffer + index * vector->elem_size,
+            (char *) vector->data_buffer + (index + 1) * vector->elem_size,
+            (vector->num_elements - index - 1) * vector->elem_size);
+    bzero((char *) vector->data_buffer + (vector->num_elements - 1) * vector->elem_size, vector->elem_size);
+    vector->num_elements--;
+    return VECTOR_REMOVE_ELEM_OK;
+}
+
 void vector_destroy(vector *vector) {
     free(vector->data_buffer);
     free(vector);

@@ -91,10 +91,44 @@ void test_vector_get_elem_at() {
     vector_destroy(int_vec);
 }
 
+void test_vector_remove_elem_at() {
+    vector *int_vec = vector_create(5, sizeof(int));
+    const int arr[] = {1, 2, 3, 4, 5};
+    for (int i = 0; i < sizeof(arr) / sizeof(arr[0]); i++) {
+        vector_append_elem(int_vec, &arr[i]);
+    }
+    assert(int_vec->num_elements == 5);
+    assert(*(int *)vector_get_elem_at(int_vec, 0) == 1);
+    assert(*(int *)vector_get_elem_at(int_vec, 1) == 2);
+    assert(*(int *)vector_get_elem_at(int_vec, 2) == 3);
+    assert(*(int *)vector_get_elem_at(int_vec, 3) == 4);
+    assert(*(int *)vector_get_elem_at(int_vec, 4) == 5);
+    const vector_remove_elem_result res1 = vector_remove_elem_at(int_vec, 2);
+    assert(res1 == VECTOR_REMOVE_ELEM_OK);
+    assert(int_vec->num_elements == 4);
+    assert(*(int *)vector_get_elem_at(int_vec, 0) == 1);
+    assert(*(int *)vector_get_elem_at(int_vec, 1) == 2);
+    assert(*(int *)vector_get_elem_at(int_vec, 2) == 4);
+    assert(*(int *)vector_get_elem_at(int_vec, 3) == 5);
+    assert(vector_get_elem_at(int_vec, 4) == nullptr);
+
+    const vector_remove_elem_result res2 = vector_remove_elem_at(int_vec, 3);
+    assert(res2 == VECTOR_REMOVE_ELEM_OK);
+    assert(int_vec->num_elements == 3);
+    assert(*(int *)vector_get_elem_at(int_vec, 0) == 1);
+    assert(*(int *)vector_get_elem_at(int_vec, 1) == 2);
+    assert(*(int *)vector_get_elem_at(int_vec, 2) == 4);
+    assert(vector_get_elem_at(int_vec, 3) == nullptr);
+    assert(vector_get_elem_at(int_vec, 4) == nullptr);
+
+    vector_destroy(int_vec);
+}
+
 int main() {
     test_vector_create_and_append();
     test_vector_insert_elem_at();
     test_vector_get_elem_at();
+    test_vector_remove_elem_at();
 
     return EXIT_SUCCESS;
 }

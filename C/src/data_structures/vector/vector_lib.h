@@ -37,6 +37,14 @@ vector_insert_elem_result vector_insert_elem_at(
 
 void *vector_get_elem_at(const vector *vector, const size_t index);
 
+typedef enum vector_remove_elem_result {
+    VECTOR_REMOVE_ELEM_OK = 0,
+    VECTOR_REMOVE_ELEM_E_VEC_ARG_NULL = 1,
+    VECTOR_REMOVE_ELEM_E_INDEX_OUT_OF_BOUNDS = 2,
+} vector_remove_elem_result;
+
+vector_remove_elem_result vector_remove_elem_at(vector *vector, size_t index);
+
 void vector_destroy(vector *vector);
 
 #endif //VECTOR_LIB_H
