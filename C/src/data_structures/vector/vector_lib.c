@@ -1,6 +1,8 @@
 #include <vector_lib.h>
 #include <nullptr_fix.h>
 #include <stdio.h>
+// ReSharper disable once CppUnusedIncludeDirective
+#include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
 
