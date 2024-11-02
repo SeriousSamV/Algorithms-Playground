@@ -3,6 +3,7 @@
 //
 
 #include "linked_list_lib.h"
+#include <nullptr_fix.h>
 
 #include <stdlib.h>
 

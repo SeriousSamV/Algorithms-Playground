@@ -1,8 +1,6 @@
 #ifndef LINKED_LIST_LIB_H
 #define LINKED_LIST_LIB_H
 
-#include <nullptr_fix.h>
-
 typedef struct ll_node {
     struct ll_node *next;
     void *data;

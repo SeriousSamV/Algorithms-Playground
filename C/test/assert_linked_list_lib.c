@@ -2,6 +2,7 @@
 #include <assert.h>
 
 #include <linked_list_lib.h>
+#include <nullptr_fix.h>
 #include <string.h>
 
 void test_int_linked_list() {
