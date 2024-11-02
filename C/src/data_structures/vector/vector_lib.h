@@ -4,7 +4,7 @@
 
 #ifndef VECTOR_LIB_H
 #define VECTOR_LIB_H
-#include <sys/_types/_size_t.h>
+#include <sys/types.h>
 
 typedef struct vector {
     size_t capacity;
