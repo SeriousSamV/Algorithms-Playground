@@ -21,9 +21,10 @@ ll_node *ll_node_get_data(const ll_node *node) {
     return node->data;
 }
 
-void ll_node_add(ll_node *out_node, const void *data) {
+ll_node* ll_node_add(ll_node *out_node, const void *data) {
     ll_node *new_node = ll_node_new(data);
     out_node->next = new_node;
+    return new_node;
 }
 
 
