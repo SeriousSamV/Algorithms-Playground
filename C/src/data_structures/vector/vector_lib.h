@@ -21,9 +21,19 @@ typedef enum vector_append_elem_result {
     VECTOR_APPEND_E_RESIZE_FAILED = 2,
 } vector_append_elem_result;
 
-vector_append_elem_result vector_append_elem(vector **vector_ref, const void *data);
+vector_append_elem_result vector_append_elem(vector *vector, const void *data);
 
-vector *vector_insert_elem_at(vector **vector_ref, const void *data, size_t index);
+typedef enum vector_insert_elem_result {
+    VECTOR_INSERT_OK = 0,
+    VECTOR_INSERT_E_VEC_ARG_NULL = 1,
+    VECTOR_INSERT_E_RESIZE_FAILED = 2,
+    VECTOR_INSERT_E_INDEX_OUT_OF_BOUNDS = 3,
+} vector_insert_elem_result;
+
+vector_insert_elem_result vector_insert_elem_at(
+    vector *vector,
+    const void *data,
+    const size_t index);
 
 void *vector_get_elem_at(const vector **vector_ref, const size_t index);
 

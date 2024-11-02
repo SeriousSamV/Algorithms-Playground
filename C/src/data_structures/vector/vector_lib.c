@@ -35,19 +35,43 @@ bool check_and_resize(vector *vector, const size_t capacity_need) {
     return true;
 }
 
-vector_append_elem_result vector_append_elem(vector **vector_ref, const void *data) {
-    vector *vector = vector_ref != nullptr ? *vector_ref : nullptr;
+vector_append_elem_result vector_append_elem(vector *vector, const void *data) {
     if (vector == nullptr) {
         fprintf(stderr, "cannot append element to null vector\n");
         fflush(stderr);
         return VECTOR_APPEND_E_VEC_ARG_NULL;
     }
     if (!check_and_resize(vector, vector->num_elements + 1)) {
-        return VECTOR_APPEND_E_VEC_ARG_NULL;
+        return VECTOR_APPEND_E_RESIZE_FAILED;
     }
     memcpy(vector->data_buffer + vector->num_elements * vector->elem_size, data, vector->elem_size);
     vector->num_elements++;
     return VECTOR_APPEND_OK;
+}
+
+vector_insert_elem_result vector_insert_elem_at(
+    vector *vector,
+    const void *data,
+    const size_t index) {
+    if (vector == nullptr) {
+        fprintf(stderr, "cannot append element to null vector\n");
+        fflush(stderr);
+        return VECTOR_INSERT_E_VEC_ARG_NULL;
+    }
+    if (index > vector->num_elements) {
+        fprintf(stderr, "index out of bounds\n");
+        fflush(stderr);
+        return VECTOR_INSERT_E_INDEX_OUT_OF_BOUNDS;
+    }
+    if (!check_and_resize(vector, vector->num_elements + 1)) {
+        return VECTOR_INSERT_E_RESIZE_FAILED;
+    }
+    memmove((char *) vector->data_buffer + (index + 1) * vector->elem_size,
+            (char *) vector->data_buffer + index * vector->elem_size,
+            (vector->num_elements - index) * vector->elem_size);
+    memcpy((char *) vector->data_buffer + index * vector->elem_size, data, vector->elem_size);
+    vector->num_elements++;
+    return VECTOR_INSERT_OK;
 }
 
 void vector_destroy(vector *vector) {
