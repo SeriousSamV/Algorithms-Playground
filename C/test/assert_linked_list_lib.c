@@ -9,7 +9,7 @@ void test_int_linked_list() {
     const int data[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
     ll_node *root = ll_node_new(&data[0]);
     ll_node *curr = root;
-    for (int i = 1; i < sizeof(data) / sizeof(data[0]); i++) {
+    for (size_t i = 1; i < sizeof(data) / sizeof(data[0]); i++) {
         curr = ll_node_add(curr, &data[i]);
     }
 
@@ -27,7 +27,7 @@ void test_string_linked_list() {
     const char *data[] = {"one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven"};
     ll_node *root = ll_node_new(data[0]);
     ll_node *curr = root;
-    for (int i = 1; i < sizeof(data) / sizeof(data[0]); i++) {
+    for (size_t i = 1; i < sizeof(data) / sizeof(data[0]); i++) {
         curr = ll_node_add(curr, data[i]);
     }
 

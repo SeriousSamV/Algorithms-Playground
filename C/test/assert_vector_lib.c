@@ -81,10 +81,10 @@ void test_vector_insert_elem_at() {
 void test_vector_get_elem_at() {
     vector *int_vec = vector_create(5, sizeof(int));
     const int arr[] = {1, 2, 3, 4, 5};
-    for (int i = 0; i < sizeof(arr) / sizeof(arr[0]); i++) {
+    for (size_t i = 0; i < sizeof(arr) / sizeof(arr[0]); i++) {
         vector_append_elem(int_vec, &arr[i]);
     }
-    for (int i = 0; i < sizeof(arr) / sizeof(arr[0]); i++) {
+    for (size_t i = 0; i < sizeof(arr) / sizeof(arr[0]); i++) {
         const int elem = *((int *)vector_get_elem_at(int_vec, i));
         assert(elem == arr[i]);
     }
@@ -94,7 +94,7 @@ void test_vector_get_elem_at() {
 void test_vector_remove_elem_at() {
     vector *int_vec = vector_create(5, sizeof(int));
     const int arr[] = {1, 2, 3, 4, 5};
-    for (int i = 0; i < sizeof(arr) / sizeof(arr[0]); i++) {
+    for (size_t i = 0; i < sizeof(arr) / sizeof(arr[0]); i++) {
         vector_append_elem(int_vec, &arr[i]);
     }
     assert(int_vec->num_elements == 5);
