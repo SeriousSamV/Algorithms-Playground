@@ -8,7 +8,7 @@
 
 
 vector *vector_create(const size_t capacity, const size_t elem_size) {
-    vector *vector = calloc(1, sizeof(*vector));
+    vector *vector = calloc(1, sizeof(struct vector));
     vector->capacity = capacity;
     vector->num_elements = 0;
     vector->elem_size = elem_size;

@@ -13,7 +13,7 @@ void test_stack_push_and_pop() {
         assert(push_res == STACK_PUSH_OK);
         assert(stack->top_index == i + 1);
     }
-    for (size_t i = sizeof(arr) / sizeof(arr[0]) - 1; i >= 0; i--) {
+    for (ssize_t i = sizeof(arr) / sizeof(arr[0]) - 1; i >= 0; i--) {
         assert(stack->top_index == i + 1);
         int *top_val = nullptr;
         const stack_pop_result pop_res = stack_pop(stack, (void **) &top_val);
