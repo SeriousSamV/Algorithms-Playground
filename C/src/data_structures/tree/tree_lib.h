@@ -1,6 +1,8 @@
 #ifndef TREE_LIB_H
 #define TREE_LIB_H
 
+#include <stdbool.h>
+
 typedef struct tree_node {
     void *data;
     struct tree_node *left;
