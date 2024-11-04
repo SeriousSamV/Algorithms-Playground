@@ -5,14 +5,14 @@
 #include <tree_lib.h>
 
 int compare_ints(const void *a, const void *b) {
-    assert(a != NULL);
-    assert(b != NULL);
+    assert(a != nullptr);
+    assert(b != nullptr);
     return *(int *)a - *(int *)b;
 }
 
 bool is_equal_ints(const void *a, const void *b) {
-    assert(a != NULL);
-    assert(b != NULL);
+    assert(a != nullptr);
+    assert(b != nullptr);
     return *(int *)a == *(int *)b;
 }
 

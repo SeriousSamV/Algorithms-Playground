@@ -2,6 +2,7 @@
 #include <nullptr_fix.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 ap_tree * tree_node_create(
     void *data,
