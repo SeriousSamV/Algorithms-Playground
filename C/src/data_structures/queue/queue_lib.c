@@ -3,6 +3,7 @@
 //
 
 #include <queue_lib.h>
+#include <nullptr_fix.h>
 
 #include <stdlib.h>
 
