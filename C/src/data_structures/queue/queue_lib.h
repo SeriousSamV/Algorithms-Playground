@@ -1,7 +1,7 @@
 #ifndef QUEUE_LIB_H
 #define QUEUE_LIB_H
 #include <linked_list_lib.h>
-#include <sys/_types/_size_t.h>
+#include <sys/types.h>
 
 typedef struct queue {
     ll_node *head;

@@ -2,7 +2,7 @@
 // Created by Samuel Vishesh Paul on 04/11/24.
 //
 
-#include "queue_lib.h"
+#include <queue_lib.h>
 
 #include <stdlib.h>
 
