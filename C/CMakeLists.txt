@@ -95,3 +95,14 @@ target_link_libraries(assert_queue_lib queue_lib nullptr_fix)
 
 add_test(test_queue_lib assert_queue_lib)
 #endregion queue_lib
+
+#region tree_lib
+add_library(tree_lib src/data_structures/tree/tree_lib.c src/data_structures/tree/tree_lib.h)
+target_include_directories(tree_lib PUBLIC src/data_structures/tree)
+target_link_libraries(tree_lib PRIVATE nullptr_fix)
+
+add_executable(assert_tree_lib test/assert_tree_lib.c)
+target_link_libraries(assert_tree_lib tree_lib)
+
+add_test(test_tree_lib assert_tree_lib)
+#endregion tree_lib
