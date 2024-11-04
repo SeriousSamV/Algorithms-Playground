@@ -18,7 +18,7 @@ bool is_equal_ints(const void *a, const void *b) {
 
 void test_tree_lib() {
     int a = 5;
-    const ap_tree *tree = tree_node_create(&a, &compare_ints, &is_equal_ints);
+    ap_tree *tree = tree_node_create(&a, &compare_ints, &is_equal_ints);
     assert(tree->root != nullptr);
     assert(*(int*)tree->root->data == 5);
     int b = 6;
@@ -62,6 +62,9 @@ void test_tree_lib() {
     assert(*(int *) tree->root->left->left->data == 2);
     assert(tree->root->right->right != nullptr);
     assert(*(int*)tree->root->right->right->data == 10);
+
+    tree_print(tree);
+    tree_destroy(tree);
 }
 
 int main() {

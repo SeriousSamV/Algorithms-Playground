@@ -2,6 +2,7 @@
 #include <nullptr_fix.h>
 #include <stdio.h>
 #include <stdlib.h>
+// ReSharper disable once CppUnusedIncludeDirective
 #include <stdbool.h>
 
 ap_tree * tree_node_create(
@@ -45,4 +46,45 @@ tree_insert_result tree_insert(const ap_tree *tree, void *data) {
     }
 
     return TREE_INSERT_OK;
+}
+
+void tree_node_print_indent(const tree_node_t *node, const int depth) { // NOLINT(*-no-recursion)
+    if (node == nullptr) {
+        for (int i = 0; i < depth; ++i) {
+            printf("\t");
+        }
+        printf("NULL\n");
+        return;
+    }
+
+    tree_node_print_indent(node->right, depth + 1);
+
+    for (int i = 0; i < depth; ++i) {
+        printf("\t");
+    }
+    printf("%d\n", *(int *) node->data);
+
+    tree_node_print_indent(node->left, depth + 1);
+}
+
+void tree_node_destroy(tree_node_t *node) { // NOLINT(*-no-recursion)
+    if (node == nullptr) {
+        return;
+    }
+    if (node->left != nullptr) {
+        tree_node_destroy(node->left);
+    }
+    if (node->right != nullptr) {
+        tree_node_destroy(node->right);
+    }
+    free(node);
+}
+
+void tree_destroy(ap_tree *tree) {
+    tree_node_destroy(tree->root);
+    free(tree);
+}
+
+void tree_print(const ap_tree *tree) {
+    tree_node_print_indent(tree->root, 0);
 }

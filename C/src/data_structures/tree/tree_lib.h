@@ -31,6 +31,6 @@ ap_tree *tree_delete(ap_tree *tree, void *data);
 
 void tree_destroy(ap_tree *tree);
 
-void tree_print(ap_tree *tree);
+void tree_print(const ap_tree *tree);
 
 #endif //TREE_LIB_H

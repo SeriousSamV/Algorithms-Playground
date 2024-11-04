@@ -102,7 +102,7 @@ target_include_directories(tree_lib PUBLIC src/data_structures/tree)
 target_link_libraries(tree_lib PRIVATE nullptr_fix)
 
 add_executable(assert_tree_lib test/assert_tree_lib.c)
-target_link_libraries(assert_tree_lib tree_lib)
+target_link_libraries(assert_tree_lib tree_lib nullptr_fix)
 
 add_test(test_tree_lib assert_tree_lib)
 #endregion tree_lib
