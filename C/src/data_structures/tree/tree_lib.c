@@ -23,29 +23,25 @@ tree_insert_result tree_insert(const ap_tree *tree, void *data) {
         fflush(stderr);
         return TREE_INSERT_E_TREE_ARG_NULL;
     }
-    tree_node_t *cur = tree->root;
     tree_node_t *future = tree->root;
-    bool isRight = false;
     while (future != nullptr) {
-        cur = future;
         if (tree->comparator(data, future->data) > 0) {
+            if (future->right == nullptr) {
+                future->right = calloc(1, sizeof(struct tree_node));
+                future->right->data = data;
+                return TREE_INSERT_OK;
+            }
             future = future->right;
-            isRight = true;
         } else {
+            if (future->left == nullptr) {
+                future->left = calloc(1, sizeof(struct tree_node));
+                future->left->data = data;
+                return TREE_INSERT_OK;
+            }
             future = future->left;
-            isRight = false;
         }
     }
-
-    if (isRight) {
-        cur->right = calloc(1, sizeof(struct tree_node));
-        cur->right->data = data;
-    } else {
-        cur->left = calloc(1, sizeof(struct tree_node));
-        cur->left->data = data;
-    }
-
-    return TREE_INSERT_OK;
+    return TREE_INSERT_UNICORN_CASE;
 }
 
 void tree_node_print_indent(const tree_node_t *node, const int depth) { // NOLINT(*-no-recursion)

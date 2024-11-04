@@ -22,7 +22,8 @@ ap_tree *tree_node_create(
 
 typedef enum tree_insert_result {
     TREE_INSERT_OK = 0,
-    TREE_INSERT_E_TREE_ARG_NULL = 1,
+    TREE_INSERT_E_TREE_ARG_NULL = -1,
+    TREE_INSERT_UNICORN_CASE = -69,
 } tree_insert_result;
 
 tree_insert_result tree_insert(const ap_tree *tree, void *data);
