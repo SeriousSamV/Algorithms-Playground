@@ -82,3 +82,16 @@ target_link_libraries(assert_stack_lib stack_lib nullptr_fix)
 
 add_test(test_stack_lib assert_stack_lib)
 #endregion stack_lib
+
+#region queue_lib
+add_library(queue_lib STATIC src/data_structures/queue/queue_lib.c src/data_structures/queue/queue_lib.h)
+target_include_directories(queue_lib PUBLIC src/data_structures/queue)
+target_link_libraries(queue_lib
+        PUBLIC linked_list_lib
+        PRIVATE nullptr_fix)
+
+add_executable(assert_queue_lib test/assert_queue_lib.c)
+target_link_libraries(assert_queue_lib queue_lib nullptr_fix)
+
+add_test(test_queue_lib assert_queue_lib)
+#endregion queue_lib
