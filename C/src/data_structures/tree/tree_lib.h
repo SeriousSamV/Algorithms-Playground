@@ -3,35 +3,35 @@
 
 #include <stdbool.h>
 
-typedef struct tree_node {
+typedef struct ap_tree_node {
     void *data;
-    struct tree_node *left;
-    struct tree_node *right;
-} tree_node_t;
+    struct ap_tree_node *left;
+    struct ap_tree_node *right;
+} ap_tree_node_t;
 
 typedef struct ap_tree {
-    tree_node_t *root;
+    ap_tree_node_t *root;
     int (*comparator)(const void *lhs, const void *rhs);
     bool (*equals)(const void *lhs, const void *rhs);
-} ap_tree;
+} ap_tree_t;
 
-ap_tree *tree_node_create(
+ap_tree_t *ap_tree_node_create(
     void *data,
     int (*comparator_ptr)(const void *lhs, const void *rhs),
     bool (*equal_ptr)(const void *lhs, const void *rhs));
 
-typedef enum tree_insert_result {
+typedef enum ap_tree_insert_result {
     TREE_INSERT_OK = 0,
     TREE_INSERT_E_TREE_ARG_NULL = -1,
     TREE_INSERT_UNICORN_CASE = -69,
-} tree_insert_result;
+} ap_tree_insert_result;
 
-tree_insert_result tree_insert(const ap_tree *tree, void *data);
+ap_tree_insert_result ap_tree_insert(const ap_tree_t *tree, void *data);
 
-ap_tree *tree_delete(ap_tree *tree, void *data);
+ap_tree_t *ap_tree_delete(ap_tree_t *tree, void *data);
 
-void tree_destroy(ap_tree *tree);
+void ap_tree_destroy(ap_tree_t *tree);
 
-void tree_print(const ap_tree *tree);
+void ap_tree_print(const ap_tree_t *tree);
 
 #endif //TREE_LIB_H

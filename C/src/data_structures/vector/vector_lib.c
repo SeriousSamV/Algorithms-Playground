@@ -7,9 +7,9 @@
 #include <string.h>
 
 
-vector *vector_create(const size_t capacity, const size_t elem_size) {
+ap_vector_t *ap_vector_create(const size_t capacity, const size_t elem_size) {
     // TODO: NOTE: lsan Direct leak of 32 byte(s) in 1 object(s) allocated
-    vector *vector = calloc(1, sizeof(struct vector)); // linked to realloc on `check_and_resize`
+    ap_vector_t *vector = calloc(1, sizeof(struct ap_vector)); // linked to realloc on `check_and_resize`
     vector->capacity = capacity;
     vector->num_elements = 0;
     vector->elem_size = elem_size;
@@ -22,7 +22,7 @@ vector *vector_create(const size_t capacity, const size_t elem_size) {
     return vector;
 }
 
-bool check_and_resize(vector *vector, const size_t capacity_need) {
+bool check_and_resize(ap_vector_t *vector, const size_t capacity_need) {
     if (capacity_need > 1024 * 64) { // {64 * elem_sz} MB
         perror("capacity need is greater than SIZE_MAX");
         return false;
@@ -43,7 +43,7 @@ bool check_and_resize(vector *vector, const size_t capacity_need) {
     return true;
 }
 
-vector_append_elem_result vector_append_elem(vector *vector, const void *data) {
+ap_vector_append_elem_result ap_vector_append_elem(ap_vector_t *vector, const void *data) {
     if (vector == nullptr) {
         fprintf(stderr, "cannot append element to null vector\n");
         fflush(stderr);
@@ -57,8 +57,8 @@ vector_append_elem_result vector_append_elem(vector *vector, const void *data) {
     return VECTOR_APPEND_OK;
 }
 
-vector_insert_elem_result vector_insert_elem_at(
-    vector *vector,
+ap_vector_insert_elem_result ap_vector_insert_elem_at(
+    ap_vector_t *vector,
     const void *data,
     const size_t index) {
     if (vector == nullptr) {
@@ -82,7 +82,7 @@ vector_insert_elem_result vector_insert_elem_at(
     return VECTOR_INSERT_OK;
 }
 
-void *vector_get_elem_at(const vector *vector, const size_t index) {
+void *ap_vector_get_elem_at(const ap_vector_t *vector, const size_t index) {
     if (vector == nullptr) {
         fprintf(stderr, "cannot get element at null vector\n");
         fflush(stderr);
@@ -96,7 +96,7 @@ void *vector_get_elem_at(const vector *vector, const size_t index) {
     return vector->data_buffer + (index * vector->elem_size);
 }
 
-vector_remove_elem_result vector_remove_elem_at(vector *vector, size_t index) {
+ap_vector_remove_elem_result ap_vector_remove_elem_at(ap_vector_t *vector, size_t index) {
     if (vector == nullptr) {
         return VECTOR_REMOVE_ELEM_E_VEC_ARG_NULL;
     }
@@ -116,7 +116,7 @@ vector_remove_elem_result vector_remove_elem_at(vector *vector, size_t index) {
     return VECTOR_REMOVE_ELEM_OK;
 }
 
-void vector_destroy(vector *vector) {
+void ap_vector_destroy(ap_vector_t *vector) {
     free(vector->data_buffer);
     free(vector);
 }

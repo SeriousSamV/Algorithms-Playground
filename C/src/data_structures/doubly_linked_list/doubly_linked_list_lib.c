@@ -7,23 +7,23 @@
 
 #include <stdlib.h>
 
-dll_node *dll_new_node(const void *data) {
-    dll_node *new_node = calloc(1, sizeof(dll_node));
+ap_doubly_linked_list_t *ap_doubly_linked_list_create(const void *data) {
+    ap_doubly_linked_list_t *new_node = calloc(1, sizeof(ap_doubly_linked_list_t));
     new_node->data = (void *) data;
     new_node->next = nullptr;
     return new_node;
 }
 
-void dll_set_data(dll_node *node, const void *data) {
+void ap_doubly_linked_list_set_data(ap_doubly_linked_list_t *node, const void *data) {
     node->data = (void *) data;
 }
 
-dll_node *dll_insert_after_node(dll_node *node, const void *data) {
+ap_doubly_linked_list_t *ap_doubly_linked_list_insert_after(ap_doubly_linked_list_t *node, const void *data) {
     if (node == nullptr) {
-        return dll_new_node(data);
+        return ap_doubly_linked_list_create(data);
     }
-    dll_node *new_node = dll_new_node(data);
-    dll_node *old_next = node->next;
+    ap_doubly_linked_list_t *new_node = ap_doubly_linked_list_create(data);
+    ap_doubly_linked_list_t *old_next = node->next;
     if (old_next != nullptr) {
         old_next->prev = new_node;
     }
@@ -33,12 +33,12 @@ dll_node *dll_insert_after_node(dll_node *node, const void *data) {
     return new_node;
 }
 
-dll_node *dll_insert_before_node(dll_node *node, const void *data) {
+ap_doubly_linked_list_t *ap_doubly_linked_list_insert_before(ap_doubly_linked_list_t *node, const void *data) {
     if (node == nullptr) {
-        return dll_new_node(data);
+        return ap_doubly_linked_list_create(data);
     }
-    dll_node *new_node = dll_new_node(data);
-    dll_node *old_prev = node->prev;
+    ap_doubly_linked_list_t *new_node = ap_doubly_linked_list_create(data);
+    ap_doubly_linked_list_t *old_prev = node->prev;
     if (old_prev != nullptr) {
         old_prev->next = new_node;
     }
@@ -48,19 +48,19 @@ dll_node *dll_insert_before_node(dll_node *node, const void *data) {
     return new_node;
 }
 
-void dll_destroy(dll_node *node) {
+void ap_doubly_linked_list_destroy(ap_doubly_linked_list_t *node) {
     if (node == nullptr) {
         return;
     }
-    dll_node *curr = node->prev;
+    ap_doubly_linked_list_t *curr = node->prev;
     while (curr != nullptr) {
-        dll_node *prev = curr->prev;
+        ap_doubly_linked_list_t *prev = curr->prev;
         free(curr);
         curr = prev;
     }
     curr = node->next;
     while (curr != nullptr) {
-        dll_node *next = curr->next;
+        ap_doubly_linked_list_t *next = curr->next;
         free(curr);
         curr = next;
     }

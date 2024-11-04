@@ -5,20 +5,20 @@
 #ifndef DOUBLY_LINKED_LIST_LIB_H
 #define DOUBLY_LINKED_LIST_LIB_H
 
-typedef struct dll_node {
-    struct dll_node *next;
-    struct dll_node *prev;
+typedef struct ap_doubly_linked_list {
+    struct ap_doubly_linked_list *next;
+    struct ap_doubly_linked_list *prev;
     void *data;
-} dll_node;
+} ap_doubly_linked_list_t;
 
-dll_node *dll_new_node(const void *data);
+ap_doubly_linked_list_t *ap_doubly_linked_list_create(const void *data);
 
-void dll_set_data(dll_node *node, const void *data);
+void ap_doubly_linked_list_set_data(ap_doubly_linked_list_t *node, const void *data);
 
-dll_node *dll_insert_after_node(dll_node *node, const void *data);
+ap_doubly_linked_list_t *ap_doubly_linked_list_insert_after(ap_doubly_linked_list_t *node, const void *data);
 
-dll_node *dll_insert_before_node(dll_node *node, const void *data);
+ap_doubly_linked_list_t *ap_doubly_linked_list_insert_before(ap_doubly_linked_list_t *node, const void *data);
 
-void dll_destroy(dll_node *node);
+void ap_doubly_linked_list_destroy(ap_doubly_linked_list_t *node);
 
 #endif //DOUBLY_LINKED_LIST_LIB_H

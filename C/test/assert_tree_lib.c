@@ -18,11 +18,11 @@ bool is_equal_ints(const void *a, const void *b) {
 
 void test_tree_lib() {
     int a = 5;
-    ap_tree *tree = tree_node_create(&a, &compare_ints, &is_equal_ints);
+    ap_tree_t *tree = ap_tree_node_create(&a, &compare_ints, &is_equal_ints);
     assert(tree->root != nullptr);
     assert(*(int*)tree->root->data == 5);
     int b = 6;
-    const tree_insert_result r1 = tree_insert(tree, &b);
+    const ap_tree_insert_result r1 = ap_tree_insert(tree, &b);
     assert(r1 == TREE_INSERT_OK);
     assert(tree->root != nullptr);
     assert(*(int*)tree->root->data == 5);
@@ -30,7 +30,7 @@ void test_tree_lib() {
     assert(tree->root->right != nullptr);
     assert(*(int*)tree->root->right->data == 6);
     int c = 4;
-    const tree_insert_result r2 = tree_insert(tree, &c);
+    const ap_tree_insert_result r2 = ap_tree_insert(tree, &c);
     assert(r2 == TREE_INSERT_OK);
     assert(tree->root != nullptr);
     assert(*(int*)tree->root->data == 5);
@@ -39,7 +39,7 @@ void test_tree_lib() {
     assert(*(int*)tree->root->right->data == 6);
     assert(*(int*)tree->root->left->data == 4);
     int d = 2;
-    const tree_insert_result r3 = tree_insert(tree, &d);
+    const ap_tree_insert_result r3 = ap_tree_insert(tree, &d);
     assert(r3 == TREE_INSERT_OK);
     assert(tree->root != nullptr);
     assert(*(int*)tree->root->data == 5);
@@ -50,7 +50,7 @@ void test_tree_lib() {
     assert(tree->root->left->left != nullptr);
     assert(*(int *) tree->root->left->left->data == 2);
     int e = 10;
-    const tree_insert_result r4 = tree_insert(tree, &e);
+    const ap_tree_insert_result r4 = ap_tree_insert(tree, &e);
     assert(r4 == TREE_INSERT_OK);
     assert(tree->root != nullptr);
     assert(*(int*)tree->root->data == 5);
@@ -63,8 +63,8 @@ void test_tree_lib() {
     assert(tree->root->right->right != nullptr);
     assert(*(int*)tree->root->right->right->data == 10);
 
-    tree_print(tree);
-    tree_destroy(tree);
+    ap_tree_print(tree);
+    ap_tree_destroy(tree);
 }
 
 int main() {

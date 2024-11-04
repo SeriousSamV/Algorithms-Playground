@@ -1,19 +1,19 @@
 #ifndef LINKED_LIST_LIB_H
 #define LINKED_LIST_LIB_H
 
-typedef struct ll_node {
-    struct ll_node *next;
+typedef struct ap_linked_list {
+    struct ap_linked_list *next;
     void *data;
-} ll_node;
+} ap_linked_list_t;
 
-ll_node *ll_node_new(const void *data);
+ap_linked_list_t *ap_linked_list_create(const void *data);
 
-ll_node *ll_node_get_next(const ll_node *node);
+ap_linked_list_t *ap_linked_list_get_next(const ap_linked_list_t *node);
 
-ll_node *ll_node_get_data(const ll_node *node);
+ap_linked_list_t *ap_linked_list_get_data(const ap_linked_list_t *node);
 
-ll_node *ll_node_add(ll_node *out_node, const void *data);
+ap_linked_list_t *ap_linked_list_add_node(ap_linked_list_t *out_node, const void *data);
 
-void ll_destroy(ll_node *node);
+void ap_linked_list_destroy(ap_linked_list_t *node);
 
 #endif //LINKED_LIST_LIB_H
