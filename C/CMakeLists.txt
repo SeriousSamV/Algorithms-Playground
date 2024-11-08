@@ -3,6 +3,8 @@ project(AlgorithmsPlaygroundInC C)
 
 set(CMAKE_C_STANDARD 23)
 
+find_library(MATH_LIBRARY m)
+
 add_compile_options(-fsanitize=address)
 add_link_options(-fsanitize=address)
 
@@ -118,14 +120,18 @@ add_test(test_tree_lib assert_tree_lib)
 #endregion tree_lib
 
 #region simple_linear_regression
-add_library(simple_linear_regression
-        src/machine_learning/simple_linear_regression.c
-        src/machine_learning/simple_linear_regression.h)
-target_include_directories(simple_linear_regression PUBLIC src/machine_learning)
-target_link_libraries(simple_linear_regression PRIVATE nullptr_fix)
+if(MATH_LIBRARY)
+    add_library(simple_linear_regression
+            src/machine_learning/simple_linear_regression.c
+            src/machine_learning/simple_linear_regression.h)
+    target_include_directories(simple_linear_regression PUBLIC src/machine_learning)
+    target_link_libraries(simple_linear_regression
+            PUBLIC ${MATH_LIBRARY}
+            PRIVATE nullptr_fix)
 
-add_executable(assert_simple_linear_regression test/assert_simple_linear_regression.c)
-target_link_libraries(assert_simple_linear_regression simple_linear_regression nullptr_fix)
+    add_executable(assert_simple_linear_regression test/assert_simple_linear_regression.c)
+    target_link_libraries(assert_simple_linear_regression simple_linear_regression nullptr_fix)
 
-add_test(test_simple_linear_regression assert_simple_linear_regression)
+    add_test(test_simple_linear_regression assert_simple_linear_regression)
+endif()
 #endregion simple_linear_regression
