@@ -2,7 +2,7 @@
 // Created by Samuel Vishesh Paul on 09/11/24.
 //
 
-#include <math.h>
+#include <tgmath.h>
 #include <simple_linear_regression.h>
 #include <nullptr_fix.h>
 #include <stdlib.h>
