@@ -116,3 +116,16 @@ target_link_libraries(assert_tree_lib tree_lib nullptr_fix)
 
 add_test(test_tree_lib assert_tree_lib)
 #endregion tree_lib
+
+#region simple_linear_regression
+add_library(simple_linear_regression
+        src/machine_learning/simple_linear_regression.c
+        src/machine_learning/simple_linear_regression.h)
+target_include_directories(simple_linear_regression PUBLIC src/machine_learning)
+target_link_libraries(simple_linear_regression PRIVATE nullptr_fix)
+
+add_executable(assert_simple_linear_regression test/assert_simple_linear_regression.c)
+target_link_libraries(assert_simple_linear_regression simple_linear_regression nullptr_fix)
+
+add_test(test_simple_linear_regression assert_simple_linear_regression)
+#endregion simple_linear_regression
