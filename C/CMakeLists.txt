@@ -30,8 +30,8 @@ include(CTest)
 enable_testing()
 
 #region nullptr_fix
-add_library(nullptr_fix INTERFACE src/nullptr_fix/nullptr_fix.h)
-target_include_directories(nullptr_fix INTERFACE src/nullptr_fix)
+add_library(nullptr_fix INTERFACE src/utils/nullptr_fix/nullptr_fix.h)
+target_include_directories(nullptr_fix INTERFACE src/utils/nullptr_fix)
 #endregion nullptr_fix
 
 #region linked_list_lib
@@ -119,19 +119,46 @@ target_link_libraries(assert_tree_lib tree_lib nullptr_fix)
 add_test(test_tree_lib assert_tree_lib)
 #endregion tree_lib
 
-#region simple_linear_regression
 if(MATH_LIBRARY)
+    #region floating_pointer_utils
+    add_library(floating_pointer_utils
+            src/utils/floating_pointer/floating_pointer_utils.c
+            src/utils/floating_pointer/floating_pointer_utils.h)
+    target_include_directories(floating_pointer_utils
+            PUBLIC src/utils/floating_pointer)
+    #endregion floating_pointer_utils
+
+    #region simple_linear_regression
     add_library(simple_linear_regression
-            src/machine_learning/simple_linear_regression.c
-            src/machine_learning/simple_linear_regression.h)
-    target_include_directories(simple_linear_regression PUBLIC src/machine_learning)
+            src/machine_learning/simple_linear_regression/v1/simple_linear_regression.c
+            src/machine_learning/simple_linear_regression/v1/simple_linear_regression.h)
+    target_include_directories(simple_linear_regression
+            PUBLIC src/machine_learning/simple_linear_regression/v1)
     target_link_libraries(simple_linear_regression
-            PUBLIC ${MATH_LIBRARY}
+            PUBLIC floating_pointer_utils
+            PRIVATE ${MATH_LIBRARY}
             PRIVATE nullptr_fix)
 
     add_executable(assert_simple_linear_regression test/assert_simple_linear_regression.c)
     target_link_libraries(assert_simple_linear_regression simple_linear_regression nullptr_fix)
 
     add_test(test_simple_linear_regression assert_simple_linear_regression)
+    #endregion simple_linear_regression
+
+    #region simple_linear_regression_v2
+    add_library(simple_linear_regression_v2
+            src/machine_learning/simple_linear_regression/v2/simple_linear_regression_v2.c
+            src/machine_learning/simple_linear_regression/v2/simple_linear_regression_v2.h)
+    target_include_directories(simple_linear_regression_v2
+            PUBLIC src/machine_learning/simple_linear_regression/v2)
+    target_link_libraries(simple_linear_regression_v2
+            PUBLIC floating_pointer_utils
+            PRIVATE ${MATH_LIBRARY}
+            PRIVATE nullptr_fix)
+
+    add_executable(assert_simple_linear_regression_v2 test/assert_simple_linear_regression_v2.c)
+    target_link_libraries(assert_simple_linear_regression_v2 simple_linear_regression_v2)
+
+    add_test(test_simple_linear_regression_v2 assert_simple_linear_regression_v2)
+    #endregion simple_linear_regression_v2
 endif()
-#endregion simple_linear_regression

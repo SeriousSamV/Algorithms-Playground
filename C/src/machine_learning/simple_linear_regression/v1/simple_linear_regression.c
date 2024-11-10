@@ -103,17 +103,3 @@ void least_square_fit(
     *out_beta = correlation(x, y, size) * standard_deviation(y, size) / standard_deviation(x, size);
     *out_alpha = mean(y, size) - (*out_beta * mean(x, size));
 }
-
-long double *range(
-    const long double start,
-    const long double end,
-    const long double step,
-    size_t *out_size) {
-    const size_t cnt = (size_t) (end - start);
-    long double *res = calloc(cnt, sizeof(long double));
-    for (size_t i = 0; i < cnt; i++) {
-        res[i] = start + (long double) i * step;
-        *out_size = cnt;
-    }
-    return res;
-}
