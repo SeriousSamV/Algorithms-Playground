@@ -5,6 +5,8 @@
 #include <floating_pointer_utils.h>
 #include <tgmath.h>
 
+// ReSharper disable once CppUnusedIncludeDirective
+#include <stdbool.h>
 #include <stdlib.h>
 
 long double *range(
