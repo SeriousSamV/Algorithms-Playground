@@ -1,40 +1,52 @@
 #include <assert.h>
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 #include <simple_linear_regression.h>
 
+bool is_equal_floating_point(
+    const long double expected,
+    const long double actual,
+    const int precision_epsilon) {
+    const long double diff = expected - actual;
+    const long double epsilon = (long double) 1.f / powl(10.f, precision_epsilon);
+    return diff < epsilon && diff > -epsilon;
+}
+
 void test_1() {
+    const long double x[] = {1, 9, 1, 9, 1, 9};
+    const long double y[] = {1, 9, 1, 9, 1, 9};
     long double alpha = 0;
     long double beta = 0;
-    const long double x1[] = {1, 9, 1, 9, 1, 9};
-    const long double y1[] = {1, 9, 1, 9, 1, 9};
-    least_square_fit(x1, y1, 6, &alpha, &beta);
-    printf("alpha = %Lf\n", alpha);
-    printf("beta = %Lf\n", beta);
-    assert(alpha > -0.001f && alpha < 0.001f);
-    assert(beta - 1 > -0.001f && beta - 1 < 0.001f);
+    // ReSharper disable CppVariableCanBeMadeConstexpr
+    const long double ALPHA = 0;
+    const long double BETA = 1;
+    // ReSharper restore CppVariableCanBeMadeConstexpr
+    least_square_fit(x, y, 6, &alpha, &beta);
+    assert(is_equal_floating_point(alpha, ALPHA, 5));
+    assert(is_equal_floating_point(beta, BETA, 5));
 }
 
 void test_2() {
+    size_t test_sz = 0;
+    long double *x = range(-100.f, 100.f, 10.f, &test_sz);
+    long double *y = calloc(test_sz, sizeof(long double));
     long double alpha = 0;
     long double beta = 0;
-    size_t test_sz = 0;
-    long double *x1 = range(-100.f, 100.f, 10.f, &test_sz);
-    long double *y1 = calloc(test_sz, sizeof(long double));
+    // ReSharper disable CppVariableCanBeMadeConstexpr
     const long double ALPHA = -5.f;
     const long double BETA = 3.f;
+    // ReSharper restore CppVariableCanBeMadeConstexpr
     for (size_t i = 0; i < test_sz; i++) {
-        y1[i] = BETA * x1[i] + ALPHA;
+        y[i] = BETA * x[i] + ALPHA;
     }
-    least_square_fit(x1, y1, test_sz, &alpha, &beta);
-    free(x1);
-    free(y1);
-    printf("alpha = %Lf\n", alpha);
-    printf("beta = %Lf\n", beta);
-    assert(alpha - ALPHA > -0.01 && alpha - ALPHA < 0.01);
-    assert(beta - BETA > -0.01 && beta - BETA < 0.01);
+    least_square_fit(x, y, test_sz, &alpha, &beta);
+    free(x);
+    free(y);
+    assert(is_equal_floating_point(alpha, ALPHA, 2));
+    assert(!is_equal_floating_point(alpha, ALPHA, 3)); // The accuracy is very low...
+    assert(is_equal_floating_point(beta, BETA, 2));
 }
 
 int main() {
