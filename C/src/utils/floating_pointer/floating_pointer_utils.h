@@ -4,6 +4,8 @@
 
 #ifndef FLOATING_POINTER_UTILS_H
 #define FLOATING_POINTER_UTILS_H
+// ReSharper disable once CppUnusedIncludeDirective
+#include <stdbool.h>
 #include <sys/types.h>
 
 long double *range(
