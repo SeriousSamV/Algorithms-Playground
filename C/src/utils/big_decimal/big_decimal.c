@@ -5,7 +5,7 @@
 #include <string.h>
 
 void reverse_string(char *str) {
-    if (str == nullptr) return;
+    if (str == NULL) return;
     const size_t len = strlen(str);
     if (len <= 0) return;
     for (int i = 0; i < len / 2; i++) {
@@ -15,11 +15,11 @@ void reverse_string(char *str) {
     }
 }
 
-char *lltoa(long long value, size_t *out_capacity, size_t *out_len) {
+char *lltoa(long long value, size_t * restrict out_capacity, size_t * restrict out_len) {
     char *buff = calloc(32, sizeof(char));
     *out_capacity = 32;
     *out_len = 0;
-    if (buff == nullptr) {
+    if (buff == NULL) {
         return nullptr;
     }
     char *p = buff;
