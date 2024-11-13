@@ -20,7 +20,7 @@ void test_big_decimal_new() {
 }
 
 int main() {
-    test_lloa();
+    test_lltoa();
     test_big_decimal_new();
     return EXIT_SUCCESS;
 }
