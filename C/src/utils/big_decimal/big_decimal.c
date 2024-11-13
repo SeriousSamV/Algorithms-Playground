@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include <string.h>
 
-void reverse_string(char *str) {
+void reverse_string(char * const str) {
     if (str == NULL) return;
     const size_t len = strlen(str);
     if (len <= 0) return;
@@ -15,7 +15,7 @@ void reverse_string(char *str) {
     }
 }
 
-char *lltoa(long long value, size_t * restrict out_capacity, size_t * restrict out_len) {
+char *lltoa(long long value, size_t * const restrict out_capacity, size_t * const restrict out_len) {
     char *buff = calloc(32, sizeof(char));
     *out_capacity = 32;
     *out_len = 0;
