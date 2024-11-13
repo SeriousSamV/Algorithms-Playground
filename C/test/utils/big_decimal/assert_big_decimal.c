@@ -5,7 +5,7 @@
 
 char *lltoa(long long value, size_t *out_capacity, size_t *out_len);
 
-void test_lloa() {
+void test_lltoa() {
     size_t num1_len = 0;
     size_t num1_buff_sz = 0;
     const char *num1 = lltoa(123, &num1_buff_sz, &num1_len);
