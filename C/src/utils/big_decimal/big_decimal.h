@@ -12,8 +12,6 @@ typedef struct big_decimal {
     bool is_positive;
 } big_decimal_t;
 
-char *lltoa(long long value, size_t *out_capacity, size_t *out_len);
-
 big_decimal_t *big_decimal_new(const long long number, const long long decimal);
 
 #endif //BIG_DECIMAL_H
