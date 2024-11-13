@@ -162,3 +162,15 @@ if(MATH_LIBRARY)
     add_test(test_simple_linear_regression_v2 assert_simple_linear_regression_v2)
     #endregion simple_linear_regression_v2
 endif()
+
+#region big_decimal
+add_library(big_decimal
+        src/utils/big_decimal/big_decimal.c
+        src/utils/big_decimal/big_decimal.h)
+target_include_directories(big_decimal PUBLIC src/utils/big_decimal)
+
+add_executable(assert_big_decimal test/utils/big_decimal/assert_big_decimal.c)
+target_link_libraries(assert_big_decimal big_decimal)
+
+add_test(test_big_decimal assert_big_decimal)
+#endregion big_decimal
