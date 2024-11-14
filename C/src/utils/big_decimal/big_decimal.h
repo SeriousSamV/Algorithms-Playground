@@ -2,6 +2,8 @@
 #define BIG_DECIMAL_H
 #include <sys/types.h>
 
+#define MIN_CAPACITY 32
+
 typedef struct big_decimal {
     char *number_string;
     size_t number_string_length;

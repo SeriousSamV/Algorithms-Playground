@@ -16,8 +16,8 @@ void reverse_string(char * const str) {
 }
 
 char *lltoa(long long value, size_t * const restrict out_capacity, size_t * const restrict out_len) {
-    char *buff = calloc(32, sizeof(char));
-    *out_capacity = 32;
+    char *buff = calloc(MIN_CAPACITY, sizeof(char));
+    *out_capacity = MIN_CAPACITY;
     *out_len = 0;
     if (buff == NULL) {
         return nullptr;
