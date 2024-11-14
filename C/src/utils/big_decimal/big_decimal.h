@@ -16,4 +16,6 @@ typedef struct big_decimal {
 
 big_decimal_t *big_decimal_new(const long long number, const long long decimal);
 
+big_decimal_t *big_decimal_add(const big_decimal_t * restrict a, const big_decimal_t * restrict b);
+
 #endif //BIG_DECIMAL_H
