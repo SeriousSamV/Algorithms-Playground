@@ -46,6 +46,7 @@ void test_big_decimal_add() {
     const char *res = add_number_strings(a, 2, false, b, 2, false, &len, &is_negative);
     printf("val=%s\n", res);
     assert(strcmp(res, "36") == 0);
+    assert(is_negative == false);
 
     const char a1[] = "99";
     const char b1[] = "1";
@@ -54,6 +55,7 @@ void test_big_decimal_add() {
     const char *res1 = add_number_strings(a1, 2, false, b1, 1, false, &len1, &is_negative1);
     printf("val=%s\n", res1);
     assert(strcmp(res1, "100") == 0);
+    assert(is_negative1 == false);
 
     const char a2[] = "101";
     const char b2[] = "1";
@@ -62,6 +64,16 @@ void test_big_decimal_add() {
     const char *res2 = add_number_strings(a2, 3, false, b2, 1, false, &len2, &is_negative2);
     printf("val=%s\n", res2);
     assert(strcmp(res2, "102") == 0);
+    assert(is_negative2 == false);
+
+    const char a3[] = "101";
+    const char b3[] = "1";
+    size_t len3 = 0;
+    bool is_negative3 = false;
+    const char *res3 = add_number_strings(a3, 3, true, b3, 1, true, &len3, &is_negative3);
+    printf("val=%s\n", res2);
+    assert(strcmp(res3, "102") == 0);
+    assert(is_negative3 == true);
 }
 
 int main() {

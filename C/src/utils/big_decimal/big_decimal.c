@@ -75,21 +75,18 @@ char *add_number_strings(
         return nullptr;
     }
     int carry = 0;
-    char *ta = calloc(2, sizeof(char));
-    char *tb = calloc(2, sizeof(char));
     char *result_ptr = result;
     if ((is_a_negative && is_b_negative) || (!is_a_negative && !is_b_negative)) {
+        *out_is_negative = (bool) is_b_negative | is_b_negative;
         const char *pa = a + a_len - 1;
         const char *pb = b + b_len - 1;
         while (pa >= a && pb >= b) {
-            ta[0] = *pa;
-            const int va = atoi(ta); // NOLINT(*-err34-c)
-            tb[0] = *pb;
-            const int vb = atoi(tb); // NOLINT(*-err34-c)
+            const int va = *pa - '0';
+            const int vb = *pb - '0';
 
             int r = va + vb + carry;
             if (r >= 10) {
-                carry = (r / 10) % 10;
+                carry = r / 10 % 10;
                 r = r % 10;
             } else {
                 carry = 0;
@@ -99,11 +96,10 @@ char *add_number_strings(
             pb--;
         }
         while (pa >= a) {
-            ta[0] = *pa;
-            const int va = atoi(ta); // NOLINT(*-err34-c)
+            const int va = *pa - '0';
             int r = va + carry;
             if (r >= 10) {
-                carry = (r / 10) % 10;
+                carry = r / 10 % 10;
                 r = r % 10;
             } else {
                 carry = 0;
@@ -112,11 +108,10 @@ char *add_number_strings(
             pa--;
         }
         while (pb >= b) {
-            tb[0] = *pa;
-            const int vb = atoi(tb); // NOLINT(*-err34-c)
+            const int vb = *pb - '0';
             int r = vb + carry;
             if (r >= 10) {
-                carry = (r / 10) % 10;
+                carry = r / 10 % 10;
                 r = r % 10;
             } else {
                 carry = 0;
@@ -128,8 +123,6 @@ char *add_number_strings(
             *result_ptr = (char) (carry + '0');
         }
     }
-    free(ta);
-    free(tb);
     reverse_string(result);
     return result;
 }
