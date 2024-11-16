@@ -9,7 +9,7 @@ void reverse_string(char *const str) {
     if (str == NULL) return;
     const size_t len = strlen(str);
     if (len <= 0) return;
-    for (int i = 0; i < len / 2; i++) {
+    for (size_t i = 0; i < len / 2; i++) {
         const char temp = str[len - 1 - i];
         str[len - 1 - i] = str[i];
         str[i] = temp;
@@ -53,12 +53,18 @@ big_decimal_t *big_decimal_new(const long long number, const long long decimal) 
 }
 
 /**
- * (-)"15" + (-)"12"
- *      5 + 2 => "7"
- *      1 + 2 => "71"
- *      rev => "17"
- *  (+)"10" + (-)"12"
+ * Adds two numeric strings and returns the result as a newly allocated string.
  *
+ * @param a The first number string.
+ * @param a_len Length of the first number string.
+ * @param is_a_negative Boolean indicating if the first number is negative.
+ * @param b The second number string.
+ * @param b_len Length of the second number string.
+ * @param is_b_negative Boolean indicating if the second number is negative.
+ * @param out_len Pointer to store the length of the result.
+ * @param out_is_negative Pointer to store whether the result is negative.
+ * @return A newly allocated string representing the sum of the two numbers.
+ *         If memory allocation fails, returns nullptr.
  */
 char *add_number_strings(
     const char *restrict const a,
@@ -77,13 +83,12 @@ char *add_number_strings(
     int carry = 0;
     char *result_ptr = result;
     if ((is_a_negative && is_b_negative) || (!is_a_negative && !is_b_negative)) {
-        *out_is_negative = (bool) is_b_negative | is_b_negative;
+        *out_is_negative = (bool) is_a_negative && is_b_negative;
         const char *pa = a + a_len - 1;
         const char *pb = b + b_len - 1;
         while (pa >= a && pb >= b) {
             const int va = *pa - '0';
             const int vb = *pb - '0';
-
             int r = va + vb + carry;
             if (r >= 10) {
                 carry = r / 10 % 10;
@@ -125,7 +130,4 @@ char *add_number_strings(
     }
     reverse_string(result);
     return result;
-}
-
-big_decimal_t *big_decimal_add(const big_decimal_t *a, const big_decimal_t *b) {
 }
