@@ -31,20 +31,6 @@ void test_big_decimal_new() {
     free(big_decimal);
 }
 
-/**
- * Adds two numeric strings and returns the result as a newly allocated string.
- *
- * @param a The first number string.
- * @param a_len Length of the first number string.
- * @param is_a_negative Boolean indicating if the first number is negative.
- * @param b The second number string.
- * @param b_len Length of the second number string.
- * @param is_b_negative Boolean indicating if the second number is negative.
- * @param out_len Pointer to store the length of the result.
- * @param out_is_negative Pointer to store whether the result is negative.
- * @return A newly allocated string representing the sum of the two numbers.
- *         If memory allocation fails, returns nullptr.
- */
 char *add_number_strings(
     const char *restrict a,
     size_t a_len,

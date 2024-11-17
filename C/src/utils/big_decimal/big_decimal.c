@@ -6,9 +6,9 @@
 #include <string.h>
 #include <sys/errno.h>
 
-void reverse_string(char *const str) {
+void reverse_string(char *const str, const size_t size) {
     if (str == NULL) return;
-    const size_t len = strlen(str);
+    const size_t len = strnlen(str, size);
     if (len <= 0) return;
     for (size_t i = 0; i < len / 2; i++) {
         const char temp = str[len - 1 - i];
@@ -42,7 +42,7 @@ char *lltoa(long long value, size_t *const restrict out_capacity, size_t *const 
         value /= 10;
         (*out_len)++;
     } while (value != 0);
-    reverse_string(buff);
+    reverse_string(buff, *out_len + 1);
     return buff;
 }
 
@@ -61,7 +61,8 @@ char *add_number_strings_if_both_signs_equal(
     const size_t b_len,
     const bool is_b_negative,
     bool *const out_is_negative,
-    char *result) {
+    char *result,
+    const size_t result_capacity) {
     int carry = 0;
     char *result_ptr = result;
     *out_is_negative = (bool) is_a_negative && is_b_negative;
@@ -108,7 +109,7 @@ char *add_number_strings_if_both_signs_equal(
     if (carry > 0) {
         *result_ptr = (char) (carry + '0');
     }
-    reverse_string(result);
+    reverse_string(result, result_capacity);
     return result;
 }
 
@@ -136,8 +137,8 @@ char *add_number_strings(
     size_t *const restrict out_len,
     bool *const restrict out_is_negative) {
     errno = 0;
-    *out_len = a_len > b_len ? a_len : b_len;
-    char *result = calloc(*out_len + 2, sizeof(char));
+    *out_len = (a_len > b_len ? a_len : b_len) + 2;
+    char *result = calloc(*out_len, sizeof(char));
     if (result == NULL) {
         char error_msg[BUFSIZ];
         snprintf(error_msg, BUFSIZ, "%s:%d %s: %s\n", __FILE_NAME__, __LINE__, __FUNCTION__,
@@ -149,9 +150,8 @@ char *add_number_strings(
         return add_number_strings_if_both_signs_equal(
             a, a_len, is_a_negative,
             b, b_len, is_b_negative,
-            out_is_negative, result);
+            out_is_negative, result, *out_len);
     }
-
     if (a_len > b_len) {
         *out_is_negative = is_a_negative;
     } else if (b_len > a_len) {
@@ -176,6 +176,6 @@ char *add_number_strings(
             }
         }
     }
-    reverse_string(result);
+    reverse_string(result, *out_len);
     return result;
 }
