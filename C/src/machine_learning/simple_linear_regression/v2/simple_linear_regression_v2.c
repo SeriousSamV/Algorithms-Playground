@@ -14,7 +14,7 @@ void least_square_fit_v2(
     long double *out_beta) {
     long double sum_x = 0;
     long double sum_y = 0;
-    for (int i = 0; i < size; i++) {
+    for (size_t i = 0; i < size; i++) {
         sum_x += x[i];
         sum_y += y[i];
     }
@@ -23,7 +23,7 @@ void least_square_fit_v2(
 
     long double num = 0;
     long double den = 0;
-    for (int i = 0; i < size; i++) {
+    for (size_t i = 0; i < size; i++) {
         num += (x[i] - mean_x) * (y[i] - mean_y);
         den += pow(x[i] - mean_x, 2);
     }
