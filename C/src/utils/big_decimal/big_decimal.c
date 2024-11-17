@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
+#include <sys/errno.h>
 
 void reverse_string(char *const str) {
     if (str == NULL) return;
@@ -134,9 +135,14 @@ char *add_number_strings(
     const bool is_b_negative,
     size_t *const restrict out_len,
     bool *const restrict out_is_negative) {
+    errno = 0;
     *out_len = a_len > b_len ? a_len : b_len;
     char *result = calloc(*out_len + 2, sizeof(char));
     if (result == NULL) {
+        char error_msg[BUFSIZ];
+        snprintf(error_msg, BUFSIZ, "%s:%d %s: %s\n", __FILE_NAME__, __LINE__, __FUNCTION__,
+                 "cannot alloc mem for result");
+        perror(error_msg);
         return nullptr;
     }
     if ((is_a_negative && is_b_negative) || (!is_a_negative && !is_b_negative)) {
@@ -145,6 +151,7 @@ char *add_number_strings(
             b, b_len, is_b_negative,
             out_is_negative, result);
     }
+
     if (a_len > b_len) {
         *out_is_negative = is_a_negative;
     } else if (b_len > a_len) {
