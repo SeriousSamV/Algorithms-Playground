@@ -10,6 +10,16 @@
 
 char *lltoa(long long value, size_t *out_capacity, size_t *out_len);
 
+char *add_number_strings(
+    const char *restrict a,
+    size_t a_len,
+    bool is_a_negative,
+    const char *restrict b,
+    size_t b_len,
+    bool is_b_negative,
+    size_t *restrict out_len,
+    bool *restrict out_is_negative);
+
 void test_lltoa() {
     size_t num1_len = 0;
     size_t num1_buff_sz = 0;
@@ -30,16 +40,6 @@ void test_big_decimal_new() {
     assert(big_decimal->number_string_length == 2);
     free(big_decimal);
 }
-
-char *add_number_strings(
-    const char *restrict a,
-    size_t a_len,
-    bool is_a_negative,
-    const char *restrict b,
-    size_t b_len,
-    bool is_b_negative,
-    size_t *restrict out_len,
-    bool *restrict out_is_negative);
 
 void test_big_decimal_add() {
     const char a[] = "12";
