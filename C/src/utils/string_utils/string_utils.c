@@ -41,3 +41,27 @@ char *lltoa(long long value, size_t *const restrict out_capacity, size_t *const 
     reverse_string(buff, *out_len + 1);
     return buff;
 }
+
+char *ulltoa(unsigned long long value, size_t *out_capacity, size_t *out_len) {
+    char *buff = calloc(STRING_UTILS_MIN_CAPACITY, sizeof(char));
+    *out_capacity = STRING_UTILS_MIN_CAPACITY;
+    *out_len = 0;
+    if (buff == NULL) {
+        return nullptr;
+    }
+    char *p = buff;
+    do {
+        if (*out_capacity < *out_len + 1) {
+            *out_capacity *= 2;
+            buff = realloc(buff, *out_capacity);
+            if (buff == nullptr) {
+                return nullptr;
+            }
+        }
+        *p++ = "0123456789"[value % 10];
+        value /= 10;
+        (*out_len)++;
+    } while (value != 0);
+    reverse_string(buff, *out_len + 1);
+    return buff;
+}

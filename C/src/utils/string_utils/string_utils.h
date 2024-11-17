@@ -10,4 +10,6 @@ void reverse_string(char *str, size_t size);
 
 char *lltoa(long long value, size_t *out_capacity, size_t *out_len);
 
+char *ulltoa(unsigned long long value, size_t *out_capacity, size_t *out_len);
+
 #endif

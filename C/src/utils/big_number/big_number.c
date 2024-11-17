@@ -5,6 +5,8 @@
 #include <stdio.h>
 #include <nullptr_fix.h>
 
+#include "string_utils.h"
+
 big_number_t * big_number_new(const char *number, const size_t length) {
     big_number_t *bn = malloc(sizeof(big_number_t));
     const size_t capacity = length + 1;
@@ -22,19 +24,18 @@ big_number_t * big_number_new(const char *number, const size_t length) {
     return bn;
 }
 
-big_number_t * big_number_from_ll(long long number) {
-    big_number_t *bn = big_number_from_ull(number < 0 ? -number : number);
+big_number_t * big_number_from_ll(const long long number) {
+    big_number_t *bn = malloc(sizeof(big_number_t));
+    bn->number = lltoa(number, &bn->capacity, &bn->length);
     if (number < 0) {
         bn->is_negative = true;
     }
     return bn;
 }
 
-big_number_t * big_number_from_ull(unsigned long long number) {
+big_number_t * big_number_from_ull(const unsigned long long number) {
     big_number_t *bn = malloc(sizeof(big_number_t));
-    bn->capacity = snprintf(nullptr, 0, "%lld", LLONG_MIN) + 1;
-    bn->number = (char *) calloc(bn->capacity, sizeof(char));
-    bn->length = snprintf(bn->number, bn->capacity, "%lld", number) + 1;
+    bn->number = ulltoa(number, &bn->capacity, &bn->length);
     bn->is_negative = false;
 
     return bn;
