@@ -52,6 +52,65 @@ big_decimal_t *big_decimal_new(const long long number, const long long decimal) 
     return decimal_p;
 }
 
+char *add_number_strings_if_both_signs_equal(
+    const char *const a,
+    const size_t a_len,
+    const bool is_a_negative,
+    const char *const b,
+    const size_t b_len,
+    const bool is_b_negative,
+    bool *const out_is_negative,
+    char *result) {
+    int carry = 0;
+    char *result_ptr = result;
+    *out_is_negative = (bool) is_a_negative && is_b_negative;
+    const char *pa = a + a_len - 1;
+    const char *pb = b + b_len - 1;
+    while (pa >= a && pb >= b) {
+        const int va = *pa - '0';
+        const int vb = *pb - '0';
+        int r = va + vb + carry;
+        if (r >= 10) {
+            carry = r / 10 % 10;
+            r = r % 10;
+        } else {
+            carry = 0;
+        }
+        *result_ptr++ = (char) (r + '0');
+        pa--;
+        pb--;
+    }
+    while (pa >= a) {
+        const int va = *pa - '0';
+        int r = va + carry;
+        if (r >= 10) {
+            carry = r / 10 % 10;
+            r = r % 10;
+        } else {
+            carry = 0;
+        }
+        *result_ptr++ = (char) (r + '0');
+        pa--;
+    }
+    while (pb >= b) {
+        const int vb = *pb - '0';
+        int r = vb + carry;
+        if (r >= 10) {
+            carry = r / 10 % 10;
+            r = r % 10;
+        } else {
+            carry = 0;
+        }
+        *result_ptr++ = (char) (r + '0');
+        pb--;
+    }
+    if (carry > 0) {
+        *result_ptr = (char) (carry + '0');
+    }
+    reverse_string(result);
+    return result;
+}
+
 /**
  * Adds two numeric strings and returns the result as a newly allocated string.
  *
@@ -80,52 +139,34 @@ char *add_number_strings(
     if (result == NULL) {
         return nullptr;
     }
-    int carry = 0;
-    char *result_ptr = result;
     if ((is_a_negative && is_b_negative) || (!is_a_negative && !is_b_negative)) {
-        *out_is_negative = (bool) is_a_negative && is_b_negative;
-        const char *pa = a + a_len - 1;
-        const char *pb = b + b_len - 1;
-        while (pa >= a && pb >= b) {
-            const int va = *pa - '0';
-            const int vb = *pb - '0';
-            int r = va + vb + carry;
-            if (r >= 10) {
-                carry = r / 10 % 10;
-                r = r % 10;
-            } else {
-                carry = 0;
+        return add_number_strings_if_both_signs_equal(
+            a, a_len, is_a_negative,
+            b, b_len, is_b_negative,
+            out_is_negative, result);
+    }
+    if (a_len > b_len) {
+        *out_is_negative = is_a_negative;
+    } else if (b_len > a_len) {
+        *out_is_negative = is_b_negative;
+    } else {
+        for (size_t i = 0;; i++) {
+            if (a[i] != '\0' && b[i] == '\0') {
+                *out_is_negative = is_a_negative;
+                break;
             }
-            *result_ptr++ = (char) (r + '0');
-            pa--;
-            pb--;
-        }
-        while (pa >= a) {
-            const int va = *pa - '0';
-            int r = va + carry;
-            if (r >= 10) {
-                carry = r / 10 % 10;
-                r = r % 10;
-            } else {
-                carry = 0;
+            if (b[i] != '\0' && a[i] == '\0') {
+                *out_is_negative = is_b_negative;
+                break;
             }
-            *result_ptr++ = (char) (r + '0');
-            pa--;
-        }
-        while (pb >= b) {
-            const int vb = *pb - '0';
-            int r = vb + carry;
-            if (r >= 10) {
-                carry = r / 10 % 10;
-                r = r % 10;
-            } else {
-                carry = 0;
+            if (a[i] > b[i]) {
+                *out_is_negative = is_a_negative;
+                break;
             }
-            *result_ptr++ = (char) (r + '0');
-            pb--;
-        }
-        if (carry > 0) {
-            *result_ptr = (char) (carry + '0');
+            if (b[i] > a[i]) {
+                *out_is_negative = is_b_negative;
+                break;
+            }
         }
     }
     reverse_string(result);
