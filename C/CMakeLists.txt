@@ -163,6 +163,20 @@ if(MATH_LIBRARY)
     #endregion simple_linear_regression_v2
 endif()
 
+#region big_number
+add_library(big_number
+        src/utils/big_number/big_number.c
+        src/utils/big_number/big_number.h)
+target_include_directories(big_number PUBLIC src/utils/big_number)
+target_link_libraries(big_number
+        PRIVATE nullptr_fix)
+
+add_executable(assert_big_number test/utils/big_number/assert_big_number.c)
+target_link_libraries(assert_big_number big_number)
+
+add_test(test_big_number assert_big_number)
+#endregion big_number
+
 #region big_decimal
 add_library(big_decimal
         src/utils/big_decimal/big_decimal.c
