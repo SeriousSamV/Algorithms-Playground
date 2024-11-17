@@ -163,13 +163,26 @@ if(MATH_LIBRARY)
     #endregion simple_linear_regression_v2
 endif()
 
+#region string_utils
+add_library(string_utils
+        src/utils/string_utils/string_utils.c
+        src/utils/string_utils/string_utils.h)
+target_include_directories(string_utils PUBLIC src/utils/string_utils)
+
+add_executable(assert_string_utils test/utils/string_utils/assert_string_utils.c)
+target_link_libraries(assert_string_utils string_utils)
+
+add_test(test_string_utils assert_string_utils)
+#endregion string_utils
+
 #region big_number
 add_library(big_number
         src/utils/big_number/big_number.c
         src/utils/big_number/big_number.h)
 target_include_directories(big_number PUBLIC src/utils/big_number)
 target_link_libraries(big_number
-        PRIVATE nullptr_fix)
+        PRIVATE nullptr_fix
+        PUBLIC string_utils)
 
 add_executable(assert_big_number test/utils/big_number/assert_big_number.c)
 target_link_libraries(assert_big_number big_number)
@@ -182,6 +195,7 @@ add_library(big_decimal
         src/utils/big_decimal/big_decimal.c
         src/utils/big_decimal/big_decimal.h)
 target_include_directories(big_decimal PUBLIC src/utils/big_decimal)
+target_link_libraries(big_decimal PUBLIC string_utils)
 
 add_executable(assert_big_decimal test/utils/big_decimal/assert_big_decimal.c)
 target_link_libraries(assert_big_decimal big_decimal)
