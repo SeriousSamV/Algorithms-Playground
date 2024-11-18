@@ -16,9 +16,10 @@ void test_lltoa() {
 
 void test_from_digits() {
     const char input[] = "98765432100";
-    assert(from_digits(input, 4) == 9876);
-    assert(from_digits(input, 8) == 98765432);
-    assert(from_digits(input + 2, 4) == 7654);
+    assert(ull_from_digits(input, 4) == 9876);
+    assert(ull_from_digits(input, 8) == 98765432);
+    assert(ull_from_digits(input + 2, 4) == 7654);
+    assert(ull_from_digits("4", 1) == 4);
 }
 
 int main() {
