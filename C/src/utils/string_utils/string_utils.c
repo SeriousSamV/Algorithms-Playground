@@ -45,35 +45,38 @@ char *lltoa(long long value, size_t *const restrict out_capacity, size_t *const 
 
 char *ulltoa(unsigned long long value, size_t *out_capacity, size_t *out_len) {
     char *buff = calloc(STRING_UTILS_MIN_CAPACITY, sizeof(char));
-    *out_capacity = STRING_UTILS_MIN_CAPACITY;
-    *out_len = 0;
+    size_t capacity = STRING_UTILS_MIN_CAPACITY;
+    size_t len = 0;
     if (buff == NULL) {
         return nullptr;
     }
     char *p = buff;
     do {
-        if (*out_capacity < *out_len + 1) {
-            *out_capacity *= 2;
-            buff = realloc(buff, *out_capacity);
+        if (capacity < len + 1) {
+            capacity *= 2;
+            buff = realloc(buff, capacity);
             if (buff == nullptr) {
                 return nullptr;
             }
         }
         *p++ = "0123456789"[value % 10];
         value /= 10;
-        (*out_len)++;
+        len++;
     } while (value != 0);
-    reverse_string(buff, *out_len + 1);
+    reverse_string(buff, len + 1);
+    if (out_capacity != NULL) *out_capacity = capacity;
+    if (out_len != NULL) *out_len = len;
     return buff;
 }
 
-long long from_digits(const char *number, const size_t len) {
+unsigned long long ull_from_digits(const char *number, const size_t len) {
+    if (len <= 0) return 0ll;
     char *t = calloc(len + 1, sizeof(char));
     for (size_t i = 0; i < len; i++) {
         t[i] = number[i];
     }
     t[len] = '\0';
-    const long long res = strtoll(t, nullptr, 10);
+    const unsigned long long res = strtoull(t, nullptr, 10);
     free(t);
     return res;
 }
