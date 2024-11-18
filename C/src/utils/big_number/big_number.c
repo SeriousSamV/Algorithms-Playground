@@ -197,63 +197,41 @@ big_number_t *big_number_add(
 big_number_t *big_number_sub_internal(
     const big_number_t *restrict const bn_a,
     const big_number_t *restrict const bn_b) {
-    char *ap_orig = strndup(bn_a->number, bn_a->length);
-    char *ap = ap_orig + bn_a->length - 1;
-    char *bp_orig = strndup(bn_b->number, bn_a->length);
-    char *bp = bp_orig + bn_b->length - 1;
-    const size_t result_capacity = bn_a->length + 1;
-    char *lhs = calloc(result_capacity, sizeof(char));
-    char *rhs = calloc(2, sizeof(char));
-    char *result_num = calloc(result_capacity, sizeof(char));
-    char *result_ptr = result_num;
-    size_t bp_cnt = 0;
-    while (bp_cnt < bn_b->length) {
-        size_t borrow_cnt = 0;
-        long long an;
-        long long bn;
-        memset(lhs, '\0', result_capacity);
-        for (;;) {
-            for (ssize_t i = borrow_cnt; // NOLINT(*-narrowing-conversions)
-                i >= 0;
-                i--) {
-                lhs[borrow_cnt - i] = *(ap - i);
+    char *const a = strndup(bn_a->number, bn_a->length + 1);
+    char *pa = a + bn_a->length - 1;
+    char *const b = strndup(bn_b->number, bn_b->length + 1);
+    const char *pb = b + bn_b->length - 1;
+    const size_t r_cap = bn_a->capacity + 1;
+    char *const r = calloc(r_cap, sizeof(char));
+    char *pr = r;
+    size_t a_len = bn_a->length;
+    for (size_t i = 0; i < bn_b->length; i++) {
+        const unsigned int va = (unsigned int) *pa - '0';
+        const unsigned int vb = (unsigned int) *pb - '0';
+        if (va < vb) {
+            size_t borrow_tracker = 1;
+            for (; *(pa - borrow_tracker) == '0' && *(pa - borrow_tracker) != '\0'; borrow_tracker++) {
+                *(pa - borrow_tracker) = '9';
             }
-            an = atoll(lhs); // NOLINT(*-err34-c)
-            rhs[0] = *bp;
-            bn = atoll(rhs); // NOLINT(*-err34-c)
-            if (an > bn) break;
-            borrow_cnt++;
+            *(pa - borrow_tracker) = *(pa - borrow_tracker) - 1; // NOLINT(*-narrowing-conversions)
+            *pr++ = 10 + va - vb + '0'; // NOLINT(*-narrowing-conversions)
+            a_len--;
+        } else {
+            *pr++ = va - vb + '0'; // NOLINT(*-narrowing-conversions)
         }
-        size_t partial_res_cap = 0;
-        size_t partial_res_len = 0;
-        char *partial_res = lltoa(an - bn, &partial_res_cap, &partial_res_len);
-        if (partial_res == NULL) {
-            char error_msg[BUFSIZ];
-            snprintf(error_msg, BUFSIZ, "%s:%d %s: %s\n", __FILE_NAME__, __LINE__, __FUNCTION__,
-                     "cannot convert ll to str");
-            perror(error_msg);
-            return nullptr;
-        }
-        *result_ptr++ = (char) partial_res[partial_res_len - 1];
-        for (ssize_t i = partial_res_len - 2; // NOLINT(*-narrowing-conversions)
-             i >= 0;
-             i--) {
-            *(ap - (partial_res_len - 1) + i) = partial_res[i]; // TODO - borrow should decrement the significant digit
-        }
-        // TODO - borrow / rest of digits from `a` should be included in result
-        free(partial_res);
-        --ap;
-        --bp;
-        ++bp_cnt;
-        borrow_cnt = 0;
+        pa--;
+        pb--;
     }
-    free(rhs);
-    free(lhs);
-    free(bp_orig);
-    free(ap_orig);
-    reverse_string(result_num, result_capacity);
-    big_number_t *result = big_number_from_str(result_num, result_capacity);
-    free(result_num);
+    for (ssize_t i = a_len - bn_b->length; // NOLINT(*-narrowing-conversions)
+         i > 0;
+         i--) {
+        *pr++ = *pa;
+        pa--;
+    }
+    big_number_t *result = big_number_from_str(r, r_cap);
+    free(r);
+    free(b);
+    free(a);
     return result;
 }
 
