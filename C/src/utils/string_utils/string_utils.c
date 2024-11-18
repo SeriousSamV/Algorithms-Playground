@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include <string_utils.h>
 #include <string.h>
@@ -64,4 +65,15 @@ char *ulltoa(unsigned long long value, size_t *out_capacity, size_t *out_len) {
     } while (value != 0);
     reverse_string(buff, *out_len + 1);
     return buff;
+}
+
+long long from_digits(const char *number, const size_t len) {
+    char *t = calloc(len + 1, sizeof(char));
+    for (size_t i = 0; i < len; i++) {
+        t[i] = number[i];
+    }
+    t[len] = '\0';
+    const long long res = strtoll(t, nullptr, 10);
+    free(t);
+    return res;
 }

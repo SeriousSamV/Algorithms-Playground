@@ -12,4 +12,6 @@ char *lltoa(long long value, size_t *out_capacity, size_t *out_len);
 
 char *ulltoa(unsigned long long value, size_t *out_capacity, size_t *out_len);
 
+long long from_digits(const char *number, size_t len);
+
 #endif

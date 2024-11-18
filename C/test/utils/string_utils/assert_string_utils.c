@@ -1,3 +1,4 @@
+// ReSharper disable CppVariableCanBeMadeConstexpr
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
@@ -13,7 +14,15 @@ void test_lltoa() {
     assert(num1_buff_sz == STRING_UTILS_MIN_CAPACITY);
 }
 
+void test_from_digits() {
+    const char input[] = "98765432100";
+    assert(from_digits(input, 4) == 9876);
+    assert(from_digits(input, 8) == 98765432);
+    assert(from_digits(input + 2, 4) == 7654);
+}
+
 int main() {
     test_lltoa();
+    test_from_digits();
     return EXIT_SUCCESS;
 }
