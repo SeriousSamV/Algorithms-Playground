@@ -69,14 +69,24 @@ char *ulltoa(unsigned long long value, size_t *out_capacity, size_t *out_len) {
     return buff;
 }
 
+unsigned long long ull_from_digits_pow(int const base, const size_t pow) {
+    if (pow == 0) {
+        return 0;
+    }
+    unsigned long long result = 1;
+    for (size_t i = 1; i < pow; i++) {
+        result *= base;
+    }
+    return result;
+}
+
 unsigned long long ull_from_digits(const char *number, const size_t len) {
     if (len <= 0) return 0ll;
-    char *t = calloc(len + 1, sizeof(char));
-    for (size_t i = 0; i < len; i++) {
-        t[i] = number[i];
+    unsigned long long res = 0ll;
+    for (ssize_t i = len - 1; // NOLINT(*-narrowing-conversions)
+         i >= 0;
+         i--) {
+        res += (number[i] - '0') * ull_from_digits_pow(10, len - i);
     }
-    t[len] = '\0';
-    const unsigned long long res = strtoull(t, nullptr, 10);
-    free(t);
     return res;
 }
