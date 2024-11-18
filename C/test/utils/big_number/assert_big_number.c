@@ -56,6 +56,33 @@ void test_big_number_sub_internal() {
     free(a1);
     free(b1);
     free(r1);
+
+    big_number_t *a2 = big_number_from_str("0", 1);
+    big_number_t *b2 = big_number_from_str("0", 1);
+    big_number_t *r2 = big_number_sub_internal(a2, b2);
+    assert(r2 != NULL);
+    assert(strcmp(r2->number, "0") == 0);
+    free(a2);
+    free(b2);
+    free(r2);
+
+    big_number_t *a3 = big_number_from_str("1000", 4);
+    big_number_t *b3 = big_number_from_str("1", 1);
+    big_number_t *r3 = big_number_sub_internal(a3, b3);
+    assert(r3 != NULL);
+    assert(strcmp(r3->number, "999") == 0);
+    free(a3);
+    free(b3);
+    free(r3);
+
+    big_number_t *a4 = big_number_from_str("5", 1);
+    big_number_t *b4 = big_number_from_str("3", 1);
+    big_number_t *r4 = big_number_sub_internal(a4, b4);
+    assert(r4 != NULL);
+    assert(strcmp(r4->number, "2") == 0);
+    free(a4);
+    free(b4);
+    free(r4);
 }
 
 int main() {
