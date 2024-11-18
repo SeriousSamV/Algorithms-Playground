@@ -4,7 +4,11 @@
 #include <stdio.h>
 #include <string.h>
 
-void test_big_decimal_add() {
+big_number_t *big_number_sub_internal(
+    const big_number_t *restrict bn_a,
+    const big_number_t *restrict bn_b);
+
+void test_big_number_add() {
     const big_number_t *a = big_number_from_str("12", 2);
     const big_number_t *b = big_number_from_str("24", 2);
     const big_number_t *res = big_number_add(a, b);
@@ -34,7 +38,28 @@ void test_big_decimal_add() {
     assert(res3->is_negative == true);
 }
 
+void test_big_number_sub_internal() {
+    big_number_t *a = big_number_from_str("12", 2);
+    big_number_t *b = big_number_from_str("9", 2);
+    big_number_t *r = big_number_sub_internal(a, b);
+    assert(r != NULL);
+    assert(strcmp(r->number, "3") == 0);
+    free(a);
+    free(b);
+    free(r);
+
+    big_number_t *a1 = big_number_from_str("100", 3);
+    big_number_t *b1 = big_number_from_str("1", 1);
+    big_number_t *r1 = big_number_sub_internal(a1, b1);
+    assert(r1 != NULL);
+    assert(strcmp(r1->number, "99") == 0);
+    free(a1);
+    free(b1);
+    free(r1);
+}
+
 int main() {
-    test_big_decimal_add();
+    test_big_number_add();
+    test_big_number_sub_internal();
     return EXIT_SUCCESS;
 }

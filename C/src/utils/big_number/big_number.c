@@ -197,20 +197,26 @@ big_number_t *big_number_add(
 big_number_t *big_number_sub_internal(
     const big_number_t *restrict const bn_a,
     const big_number_t *restrict const bn_b) {
-    char *ap = strdup(bn_a->number);
-    char *bp = strdup(bn_b->number);
-    char *lhs = calloc(bn_a->length + 1, sizeof(char));
-    char *rhs = calloc(2, sizeof(char));
+    char *ap_orig = strndup(bn_a->number, bn_a->length);
+    char *ap = ap_orig + bn_a->length - 1;
+    char *bp_orig = strndup(bn_b->number, bn_a->length);
+    char *bp = bp_orig + bn_b->length - 1;
     const size_t result_capacity = bn_a->length + 1;
+    char *lhs = calloc(result_capacity, sizeof(char));
+    char *rhs = calloc(2, sizeof(char));
     char *result_num = calloc(result_capacity, sizeof(char));
     char *result_ptr = result_num;
-    while (bp != bn_b->number) {
+    size_t bp_cnt = 0;
+    while (bp_cnt < bn_b->length) {
         size_t borrow_cnt = 0;
         long long an;
         long long bn;
+        memset(lhs, '\0', result_capacity);
         for (;;) {
-            for (size_t i = 0; i >= borrow_cnt; i++) {
-                ap[i] = *(ap - i);
+            for (ssize_t i = borrow_cnt; // NOLINT(*-narrowing-conversions)
+                i >= 0;
+                i--) {
+                lhs[borrow_cnt - i] = *(ap - i);
             }
             an = atoll(lhs); // NOLINT(*-err34-c)
             rhs[0] = *bp;
@@ -228,17 +234,22 @@ big_number_t *big_number_sub_internal(
             perror(error_msg);
             return nullptr;
         }
-        // TODO - incomplete
-        *result_ptr++ = (char) an - bn; // TODO - handle multi digit result
+        *result_ptr++ = (char) partial_res[partial_res_len - 1];
+        for (ssize_t i = partial_res_len - 2; // NOLINT(*-narrowing-conversions)
+             i >= 0;
+             i--) {
+            *(ap - (partial_res_len - 1) + i) = partial_res[i];
+        }
         free(partial_res);
-        ap = ap - borrow_cnt;
-        bp = bp + 1;
+        --ap;
+        --bp;
+        ++bp_cnt;
         borrow_cnt = 0;
     }
     free(rhs);
     free(lhs);
-    free(bp);
-    free(ap);
+    free(bp_orig);
+    free(ap_orig);
     reverse_string(result_num, result_capacity);
     big_number_t *result = big_number_from_str(result_num, result_capacity);
     free(result_num);
