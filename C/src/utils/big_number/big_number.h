@@ -17,11 +17,17 @@ typedef struct big_number {
     bool is_negative;
 } big_number_t;
 
-big_number_t *big_number_new(const char *number, size_t length);
+big_number_t *big_number_new(void);
+
+big_number_t *big_number_from_str(const char *number, size_t length);
 
 big_number_t *big_number_from_ll(long long number);
 
 big_number_t *big_number_from_ull(unsigned long long number);
+
+big_number_t *big_number_add(
+    const big_number_t *restrict bn_a,
+    const big_number_t *restrict bn_b);
 
 void big_number_free(big_number_t *bn);
 
