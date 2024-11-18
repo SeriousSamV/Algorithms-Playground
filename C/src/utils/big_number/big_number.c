@@ -238,8 +238,9 @@ big_number_t *big_number_sub_internal(
         for (ssize_t i = partial_res_len - 2; // NOLINT(*-narrowing-conversions)
              i >= 0;
              i--) {
-            *(ap - (partial_res_len - 1) + i) = partial_res[i];
+            *(ap - (partial_res_len - 1) + i) = partial_res[i]; // TODO - borrow should decrement the significant digit
         }
+        // TODO - borrow / rest of digits from `a` should be included in result
         free(partial_res);
         --ap;
         --bp;
