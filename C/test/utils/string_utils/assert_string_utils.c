@@ -22,8 +22,16 @@ void test_from_digits() {
     assert(ull_from_digits("4", 1) == 4);
 }
 
+void test_ull_digits_count() {
+    assert(ull_digits_count(123ll) == 3);
+    assert(ull_digits_count(12ll) == 2);
+    assert(ull_digits_count(1ll) == 1);
+    assert(ull_digits_count(0ll) == 1);
+}
+
 int main() {
     test_lltoa();
     test_from_digits();
+    test_ull_digits_count();
     return EXIT_SUCCESS;
 }

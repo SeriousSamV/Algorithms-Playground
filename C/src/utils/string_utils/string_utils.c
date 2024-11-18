@@ -90,3 +90,15 @@ unsigned long long ull_from_digits(const char *number, const size_t len) {
     }
     return res;
 }
+
+size_t ull_digits_count(unsigned long long number) {
+    if (number == 0) {
+        return 1;
+    }
+    size_t count = 0;
+    while (number != 0) {
+        number = number / 10;
+        count++;
+    }
+    return count;
+}
