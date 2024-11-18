@@ -19,13 +19,17 @@ typedef struct big_number {
 
 big_number_t *big_number_new(void);
 
-big_number_t *big_number_from_str(const char *number, size_t length);
+big_number_t *big_number_from_str(const char *number, size_t capacity);
 
 big_number_t *big_number_from_ll(long long number);
 
 big_number_t *big_number_from_ull(unsigned long long number);
 
 big_number_t *big_number_add(
+    const big_number_t *restrict bn_a,
+    const big_number_t *restrict bn_b);
+
+big_number_t *big_number_sub(
     const big_number_t *restrict bn_a,
     const big_number_t *restrict bn_b);
 
