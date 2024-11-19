@@ -204,30 +204,32 @@ big_number_t *big_number_sub_internal(
     const size_t r_cap = bn_a->capacity + 1;
     char *const r = calloc(r_cap, sizeof(char));
     char *pr = r;
-    size_t a_len = bn_a->length;
     for (size_t i = 0; i < bn_b->length; i++) {
         const unsigned int va = (unsigned int) *pa - '0';
         const unsigned int vb = (unsigned int) *pb - '0';
         if (va < vb) {
-            size_t borrow_tracker = 1;
-            for (; *(pa - borrow_tracker) == '0' && *(pa - borrow_tracker) != '\0'; borrow_tracker++) {
-                *(pa - borrow_tracker) = '9';
+            size_t bt = 1;
+            for (; *(pa - bt) == '0' && *(pa - bt) != '\0'; bt++) {
+                *(pa - bt) = '9';
             }
-            *(pa - borrow_tracker) = *(pa - borrow_tracker) - 1; // NOLINT(*-narrowing-conversions)
+            *(pa - bt) = *(pa - bt) - 1; // NOLINT(*-narrowing-conversions)
             *pr++ = 10 + va - vb + '0'; // NOLINT(*-narrowing-conversions)
-            a_len--;
         } else {
             *pr++ = va - vb + '0'; // NOLINT(*-narrowing-conversions)
         }
         pa--;
         pb--;
     }
-    for (ssize_t i = a_len - bn_b->length; // NOLINT(*-narrowing-conversions)
-         i > 0;
-         i--) {
+    while (pa >= a) {
         *pr++ = *pa;
         pa--;
     }
+    pr--;
+    while (*pr == '0' && pr > r) {
+        *pr = '\0';
+        pr--;
+    }
+    reverse_string(r, r_cap);
     big_number_t *result = big_number_from_str(r, r_cap);
     free(r);
     free(b);
