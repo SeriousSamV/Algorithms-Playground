@@ -266,12 +266,13 @@ big_integer_t *big_integer_sub_internal(
 big_integer_t *big_integer_sub(const big_integer_t *bi_a, const big_integer_t *bi_b) {
     const size_t a_len = bi_a->length;
     const size_t b_len = bi_b->length;
-    errno = 0;
     bool is_both_equal = true;
     bool is_mod_a_bigger = false;
     if (a_len > b_len) {
         is_mod_a_bigger = true;
+        // ReSharper disable CppDFAUnusedValue
         is_both_equal = false;
+        // ReSharper restore CppDFAUnusedValue
     } else if (b_len > a_len) {
         is_mod_a_bigger = false;
         is_both_equal = false;
@@ -281,7 +282,9 @@ big_integer_t *big_integer_sub(const big_integer_t *bi_a, const big_integer_t *b
         for (size_t i = 0; i < a_len; i++) {
             if (a[i] > b[i]) {
                 is_mod_a_bigger = true;
+                // ReSharper disable CppDFAUnusedValue
                 is_both_equal = false;
+                // ReSharper restore CppDFAUnusedValue
                 break;
             }
             if (b[i] > a[i]) {
