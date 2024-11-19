@@ -4,8 +4,15 @@
 #include <string.h>
 #include <stdio.h>
 #include <nullptr_fix.h>
+// ReSharper disable CppUnusedIncludeDirective
+#include <stdbool.h>
+// ReSharper restore CppUnusedIncludeDirective
 
 #include "string_utils.h"
+
+big_number_t *big_number_sub_internal(
+    const big_number_t *restrict bn_a,
+    const big_number_t *restrict bn_b);
 
 big_number_t *big_number_new(void) {
     big_number_t *bn = malloc(sizeof(big_number_t));
@@ -147,45 +154,64 @@ big_number_t *big_number_add_internal(
     return result_bn;
 }
 
+/**
+ * Adds two `big_number_t`
+ *
+ * @param bn_a The first big number input.
+ * @param bn_b The second big number input.
+ * @return A new big_number_t structure containing the sum of bn_a and bn_b.
+ */
 big_number_t *big_number_add(
     const big_number_t *restrict const bn_a,
     const big_number_t *restrict const bn_b) {
-    const char *a = bn_a->number;
     const size_t a_len = bn_a->length;
     const bool is_a_negative = bn_a->is_negative;
-    const char *b = bn_b->number;
     const size_t b_len = bn_b->length;
     const bool is_b_negative = bn_b->is_negative;
     errno = 0;
     if ((is_a_negative && is_b_negative) || (!is_a_negative && !is_b_negative)) {
-        return big_number_add_internal(bn_a, bn_b);
+        big_number_t * result = big_number_add_internal(bn_a, bn_b);
+        result->is_negative = is_a_negative;
+        return result;
     }
+    bool is_mod_a_bigger = false;
     bool out_is_negative = false;
     if (a_len > b_len) {
         out_is_negative = is_a_negative;
+        is_mod_a_bigger = true;
     } else if (b_len > a_len) {
         out_is_negative = is_b_negative;
+        is_mod_a_bigger = false;
     } else {
-        for (size_t i = 0;; i++) {
-            if (a[i] != '\0' && b[i] == '\0') {
-                out_is_negative = is_a_negative;
-                break;
-            }
-            if (b[i] != '\0' && a[i] == '\0') {
-                out_is_negative = is_b_negative;
-                break;
-            }
+        const char *a = bn_a->number;
+        const char *b = bn_b->number;
+        for (size_t i = 0; i < a_len; i++) {
             if (a[i] > b[i]) {
                 out_is_negative = is_a_negative;
+                is_mod_a_bigger = true;
                 break;
             }
             if (b[i] > a[i]) {
                 out_is_negative = is_b_negative;
+                is_mod_a_bigger = false;
                 break;
             }
         }
     }
-    return nullptr;
+    const big_number_t ac = {
+        .capacity = bn_a->capacity, .number = bn_a->number, .is_negative = false, .length = bn_a->length
+    };
+    const big_number_t bc = {
+        .capacity = bn_b->capacity, .number = bn_b->number, .is_negative = false, .length = bn_b->length
+    };
+    if (is_mod_a_bigger) {
+        big_number_t *result = big_number_sub_internal(&ac, &bc);
+        result->is_negative = out_is_negative;
+        return result;
+    }
+    big_number_t *result = big_number_sub_internal(&bc, &ac);
+    result->is_negative = out_is_negative;
+    return result;
 }
 
 /**

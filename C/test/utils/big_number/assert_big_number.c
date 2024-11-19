@@ -1,41 +1,105 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <big_number.h>
-#include <stdio.h>
 #include <string.h>
+// ReSharper disable CppUnusedIncludeDirective
+#include <stdbool.h>
+// ReSharper restore CppUnusedIncludeDirective
 
 big_number_t *big_number_sub_internal(
     const big_number_t *restrict bn_a,
     const big_number_t *restrict bn_b);
 
 void test_big_number_add() {
-    const big_number_t *a = big_number_from_str("12", 2);
-    const big_number_t *b = big_number_from_str("24", 2);
-    const big_number_t *res = big_number_add(a, b);
-    printf("val=%s\n", res->number);
+    big_number_t *a = big_number_from_str("12", 2);
+    big_number_t *b = big_number_from_str("24", 2);
+    big_number_t *res = big_number_add(a, b);
     assert(strcmp(res->number, "36") == 0);
     assert(res->is_negative == false);
+    big_number_free(res);
+    big_number_free(b);
+    big_number_free(a);
 
-    const big_number_t *a1 = big_number_from_str("99", 2);
-    const big_number_t *b1 = big_number_from_str("1", 1);
-    const big_number_t *res1 = big_number_add(a1, b1);
-    printf("val=%s\n", res1->number);
+    big_number_t *a1 = big_number_from_str("99", 2);
+    big_number_t *b1 = big_number_from_str("1", 1);
+    big_number_t *res1 = big_number_add(a1, b1);
     assert(strcmp(res1->number, "100") == 0);
     assert(res1->is_negative == false);
+    big_number_free(res1);
+    big_number_free(b1);
+    big_number_free(a1);
 
-    const big_number_t *a2 = big_number_from_str("101", 3);
-    const big_number_t *b2 = big_number_from_str("1", 1);
-    const big_number_t *res2 = big_number_add(a2, b2);
-    printf("val=%s\n", res2->number);
+    big_number_t *a2 = big_number_from_str("101", 3);
+    big_number_t *b2 = big_number_from_str("1", 1);
+    big_number_t *res2 = big_number_add(a2, b2);
     assert(strcmp(res2->number, "102") == 0);
     assert(res2->is_negative == false);
+    big_number_free(res2);
+    big_number_free(b2);
+    big_number_free(a2);
 
-    const big_number_t *a3 = big_number_from_str("-101", 3);
-    const big_number_t *b3 = big_number_from_str("-1", 1);
-    const big_number_t *res3 = big_number_add(a3, b3);
-    printf("val=%s\n", res3->number);
+    big_number_t *a3 = big_number_from_str("-101", 3);
+    big_number_t *b3 = big_number_from_str("-1", 1);
+    big_number_t *res3 = big_number_add(a3, b3);
     assert(strcmp(res3->number, "102") == 0);
     assert(res3->is_negative == true);
+    big_number_free(res3);
+    big_number_free(b3);
+    big_number_free(a3);
+
+    big_number_t *a4 = big_number_from_str("-12", 2);
+    big_number_t *b4 = big_number_from_str("24", 2);
+    big_number_t *res4 = big_number_add(a4, b4);
+    assert(strcmp(res4->number, "12") == 0);
+    assert(res4->is_negative == false);
+    big_number_free(res4);
+    big_number_free(b4);
+    big_number_free(a4);
+
+    big_number_t *a5 = big_number_from_str("-99", 2);
+    big_number_t *b5 = big_number_from_str("1", 1);
+    big_number_t *res5 = big_number_add(a5, b5);
+    assert(strcmp(res5->number, "98") == 0);
+    assert(res5->is_negative == true);
+    big_number_free(res5);
+    big_number_free(b5);
+    big_number_free(a5);
+
+    big_number_t *a6 = big_number_from_str("50", 2);
+    big_number_t *b6 = big_number_from_str("-50", 2);
+    big_number_t *res6 = big_number_add(a6, b6);
+    assert(strcmp(res6->number, "0") == 0);
+    assert(res6->is_negative == false);
+    big_number_free(res6);
+    big_number_free(b6);
+    big_number_free(a6);
+
+    big_number_t *a7 = big_number_from_str("-50", 2);
+    big_number_t *b7 = big_number_from_str("50", 2);
+    big_number_t *res7 = big_number_add(a7, b7);
+    assert(strcmp(res7->number, "0") == 0);
+    assert(res7->is_negative == false);
+    big_number_free(res7);
+    big_number_free(b7);
+    big_number_free(a7);
+
+    big_number_t *a8 = big_number_from_str("-123", 3);
+    big_number_t *b8 = big_number_from_str("23", 2);
+    big_number_t *res8 = big_number_add(a8, b8);
+    assert(strcmp(res8->number, "100") == 0);
+    assert(res8->is_negative == true);
+    big_number_free(res8);
+    big_number_free(b8);
+    big_number_free(a8);
+
+    big_number_t *a9 = big_number_from_str("123", 3);
+    big_number_t *b9 = big_number_from_str("-23", 2);
+    big_number_t *res9 = big_number_add(a9, b9);
+    assert(strcmp(res9->number, "100") == 0);
+    assert(res9->is_negative == false);
+    big_number_free(res9);
+    big_number_free(b9);
+    big_number_free(a9);
 }
 
 void test_big_number_sub_internal() {
