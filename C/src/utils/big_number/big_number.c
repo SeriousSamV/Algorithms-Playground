@@ -264,4 +264,61 @@ big_number_t *big_number_sub_internal(
 }
 
 big_number_t *big_number_sub(const big_number_t *bn_a, const big_number_t *bn_b) {
+    const size_t a_len = bn_a->length;
+    const size_t b_len = bn_b->length;
+    errno = 0;
+    bool is_both_equal = true;
+    bool is_mod_a_bigger = false;
+    if (a_len > b_len) {
+        is_mod_a_bigger = true;
+        is_both_equal = false;
+    } else if (b_len > a_len) {
+        is_mod_a_bigger = false;
+        is_both_equal = false;
+    } else {
+        const char *a = bn_a->number;
+        const char *b = bn_b->number;
+        for (size_t i = 0; i < a_len; i++) {
+            if (a[i] > b[i]) {
+                is_mod_a_bigger = true;
+                is_both_equal = false;
+                break;
+            }
+            if (b[i] > a[i]) {
+                is_mod_a_bigger = false;
+                is_both_equal = false;
+                break;
+            }
+        }
+    }
+    const big_number_t ac = {
+        .capacity = bn_a->capacity, .number = bn_a->number, .is_negative = false, .length = bn_a->length
+    };
+    const big_number_t bc = {
+        .capacity = bn_b->capacity, .number = bn_b->number, .is_negative = false, .length = bn_b->length
+    };
+    if (is_mod_a_bigger) {
+        big_number_t *result = big_number_sub_internal(&ac, &bc);
+        result->is_negative = bn_a->is_negative;
+        return result;
+    }
+    big_number_t *result = big_number_sub_internal(&bc, &ac);
+    if (!is_both_equal) {
+        if (!bn_a->is_negative) {
+            if (!bn_b->is_negative) {
+                result->is_negative = true;
+            } else {
+                result->is_negative = false;
+            }
+        } else {
+            if (!bn_b->is_negative) {
+                result->is_negative = false;
+            } else {
+                result->is_negative = true;
+            }
+        }
+    } else {
+        result->is_negative = false;
+    }
+    return result;
 }
