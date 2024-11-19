@@ -1,4 +1,4 @@
-#include <big_number.h>
+#include <big_integer.h>
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
@@ -10,41 +10,41 @@
 
 #include "string_utils.h"
 
-big_number_t *big_number_sub_internal(
-    const big_number_t *restrict bn_a,
-    const big_number_t *restrict bn_b);
+big_integer_t *big_integer_sub_internal(
+    const big_integer_t *restrict bi_a,
+    const big_integer_t *restrict bi_b);
 
-big_number_t *big_number_new(void) {
-    big_number_t *bn = malloc(sizeof(big_number_t));
-    if (bn == NULL) {
+big_integer_t *big_integer_new(void) {
+    big_integer_t *bi = malloc(sizeof(big_integer_t));
+    if (bi == NULL) {
         char error_msg[BUFSIZ];
         snprintf(error_msg, BUFSIZ, "%s:%d %s: %s\n", __FILE_NAME__, __LINE__, __FUNCTION__,
                  "cannot alloc mem for big_number_t");
         perror(error_msg);
         return nullptr;
     }
-    bn->capacity = BIG_NUMBER_DEFAULT_BUFF_SIZE;
-    bn->number = calloc(bn->capacity, sizeof(char));
-    if (bn->number == NULL) {
+    bi->capacity = BIG_INTEGER_DEFAULT_BUFF_SIZE;
+    bi->number = calloc(bi->capacity, sizeof(char));
+    if (bi->number == NULL) {
         char error_msg[BUFSIZ];
         snprintf(error_msg, BUFSIZ, "%s:%d %s: %s\n", __FILE_NAME__, __LINE__, __FUNCTION__,
                  "cannot alloc mem for number buffer");
         perror(error_msg);
         return nullptr;
     }
-    bn->number[0] = '0';
-    bn->number[1] = '\0';
-    bn->length = 1;
-    bn->is_negative = false;
-    return bn;
+    bi->number[0] = '0';
+    bi->number[1] = '\0';
+    bi->length = 1;
+    bi->is_negative = false;
+    return bi;
 }
 
-big_number_t *big_number_from_str(const char *number, const size_t capacity) {
+big_integer_t *big_integer_from_str(const char *number, const size_t capacity) {
     if (number == NULL || capacity == 0) {
         return nullptr;
     }
-    big_number_t *bn = malloc(sizeof(big_number_t));
-    if (bn == NULL) {
+    big_integer_t *bi = malloc(sizeof(big_integer_t));
+    if (bi == NULL) {
         char error_msg[BUFSIZ];
         snprintf(error_msg, BUFSIZ, "%s:%d %s: %s\n", __FILE_NAME__, __LINE__, __FUNCTION__,
                  "cannot alloc mem for big_number_t");
@@ -53,57 +53,57 @@ big_number_t *big_number_from_str(const char *number, const size_t capacity) {
     }
     const size_t final_capacity = capacity + 1;
     if (number[0] == '-') {
-        bn->is_negative = true;
+        bi->is_negative = true;
         number++;
     } else {
-        bn->is_negative = false;
+        bi->is_negative = false;
     }
-    bn->number = calloc(final_capacity, sizeof(char));
-    if (bn->number == NULL) {
+    bi->number = calloc(final_capacity, sizeof(char));
+    if (bi->number == NULL) {
         char error_msg[BUFSIZ];
         snprintf(error_msg, BUFSIZ, "%s:%d %s: %s\n", __FILE_NAME__, __LINE__, __FUNCTION__,
                  "cannot alloc mem for number buffer");
         perror(error_msg);
         return nullptr;
     }
-    strncpy(bn->number, number, capacity);
-    bn->length = strnlen(bn->number, BIG_NUMBER_MAX_DIGITS);
-    bn->capacity = final_capacity;
-    return bn;
+    strncpy(bi->number, number, capacity);
+    bi->length = strnlen(bi->number, BIG_INTEGER_MAX_DIGITS);
+    bi->capacity = final_capacity;
+    return bi;
 }
 
-big_number_t *big_number_from_ll(const long long number) {
-    big_number_t *bn = big_number_new();
-    bn->number = lltoa(number, &bn->capacity, &bn->length);
+big_integer_t *big_integer_from_ll(const long long number) {
+    big_integer_t *bi = big_integer_new();
+    bi->number = lltoa(number, &bi->capacity, &bi->length);
     if (number < 0) {
-        bn->is_negative = true;
+        bi->is_negative = true;
     }
-    return bn;
+    return bi;
 }
 
-big_number_t *big_number_from_ull(const unsigned long long number) {
-    big_number_t *bn = big_number_new();
-    bn->number = ulltoa(number, &bn->capacity, &bn->length);
-    bn->is_negative = false;
-    return bn;
+big_integer_t *big_integer_from_ull(const unsigned long long number) {
+    big_integer_t *bi = big_integer_new();
+    bi->number = ulltoa(number, &bi->capacity, &bi->length);
+    bi->is_negative = false;
+    return bi;
 }
 
-void big_number_free(big_number_t *bn) {
-    free(bn->number);
-    free(bn);
+void big_integer_free(big_integer_t *bi) {
+    free(bi->number);
+    free(bi);
 }
 
-big_number_t *big_number_add_internal(
-    const big_number_t *restrict const bn_a,
-    const big_number_t *restrict const bn_b) {
-    const char *a = bn_a->number;
-    const size_t a_len = bn_a->length;
-    const bool is_a_negative = bn_a->is_negative;
-    const char *b = bn_b->number;
-    const size_t b_len = bn_b->length;
-    const bool is_b_negative = bn_b->is_negative;
+big_integer_t *big_number_add_internal(
+    const big_integer_t *restrict const bi_a,
+    const big_integer_t *restrict const bi_b) {
+    const char *a = bi_a->number;
+    const size_t a_len = bi_a->length;
+    const bool is_a_negative = bi_a->is_negative;
+    const char *b = bi_b->number;
+    const size_t b_len = bi_b->length;
+    const bool is_b_negative = bi_b->is_negative;
 
-    big_number_t *result_bn = big_number_new();
+    big_integer_t *result_bn = big_integer_new();
     int carry = 0;
     char *result_ptr = result_bn->number;
     result_bn->is_negative = (bool) is_a_negative && is_b_negative;
@@ -157,20 +157,20 @@ big_number_t *big_number_add_internal(
 /**
  * Adds two `big_number_t`
  *
- * @param bn_a The first big number input.
- * @param bn_b The second big number input.
+ * @param bi_a The first big number input.
+ * @param bi_b The second big number input.
  * @return A new big_number_t structure containing the sum of bn_a and bn_b.
  */
-big_number_t *big_number_add(
-    const big_number_t *restrict const bn_a,
-    const big_number_t *restrict const bn_b) {
-    const size_t a_len = bn_a->length;
-    const bool is_a_negative = bn_a->is_negative;
-    const size_t b_len = bn_b->length;
-    const bool is_b_negative = bn_b->is_negative;
+big_integer_t *big_integer_add(
+    const big_integer_t *restrict const bi_a,
+    const big_integer_t *restrict const bi_b) {
+    const size_t a_len = bi_a->length;
+    const bool is_a_negative = bi_a->is_negative;
+    const size_t b_len = bi_b->length;
+    const bool is_b_negative = bi_b->is_negative;
     errno = 0;
     if ((is_a_negative && is_b_negative) || (!is_a_negative && !is_b_negative)) {
-        big_number_t * result = big_number_add_internal(bn_a, bn_b);
+        big_integer_t * result = big_number_add_internal(bi_a, bi_b);
         result->is_negative = is_a_negative;
         return result;
     }
@@ -183,8 +183,8 @@ big_number_t *big_number_add(
         out_is_negative = is_b_negative;
         is_mod_a_bigger = false;
     } else {
-        const char *a = bn_a->number;
-        const char *b = bn_b->number;
+        const char *a = bi_a->number;
+        const char *b = bi_b->number;
         for (size_t i = 0; i < a_len; i++) {
             if (a[i] > b[i]) {
                 out_is_negative = is_a_negative;
@@ -198,39 +198,39 @@ big_number_t *big_number_add(
             }
         }
     }
-    const big_number_t ac = {
-        .capacity = bn_a->capacity, .number = bn_a->number, .is_negative = false, .length = bn_a->length
+    const big_integer_t ac = {
+        .capacity = bi_a->capacity, .number = bi_a->number, .is_negative = false, .length = bi_a->length
     };
-    const big_number_t bc = {
-        .capacity = bn_b->capacity, .number = bn_b->number, .is_negative = false, .length = bn_b->length
+    const big_integer_t bc = {
+        .capacity = bi_b->capacity, .number = bi_b->number, .is_negative = false, .length = bi_b->length
     };
     if (is_mod_a_bigger) {
-        big_number_t *result = big_number_sub_internal(&ac, &bc);
+        big_integer_t *result = big_integer_sub_internal(&ac, &bc);
         result->is_negative = out_is_negative;
         return result;
     }
-    big_number_t *result = big_number_sub_internal(&bc, &ac);
+    big_integer_t *result = big_integer_sub_internal(&bc, &ac);
     result->is_negative = out_is_negative;
     return result;
 }
 
 /**
  *
- * @param bn_a a where a > b && a > 0
- * @param bn_b b where b < a && b > 0
+ * @param bi_a a where a > b && a > 0
+ * @param bi_b b where b < a && b > 0
  * @return val
  */
-big_number_t *big_number_sub_internal(
-    const big_number_t *restrict const bn_a,
-    const big_number_t *restrict const bn_b) {
-    char *const a = strndup(bn_a->number, bn_a->length + 1);
-    char *pa = a + bn_a->length - 1;
-    char *const b = strndup(bn_b->number, bn_b->length + 1);
-    const char *pb = b + bn_b->length - 1;
-    const size_t r_cap = bn_a->capacity + 1;
+big_integer_t *big_integer_sub_internal(
+    const big_integer_t *restrict const bi_a,
+    const big_integer_t *restrict const bi_b) {
+    char *const a = strndup(bi_a->number, bi_a->length + 1);
+    char *pa = a + bi_a->length - 1;
+    char *const b = strndup(bi_b->number, bi_b->length + 1);
+    const char *pb = b + bi_b->length - 1;
+    const size_t r_cap = bi_a->capacity + 1;
     char *const r = calloc(r_cap, sizeof(char));
     char *pr = r;
-    for (size_t i = 0; i < bn_b->length; i++) {
+    for (size_t i = 0; i < bi_b->length; i++) {
         const unsigned int va = (unsigned int) *pa - '0';
         const unsigned int vb = (unsigned int) *pb - '0';
         if (va < vb) {
@@ -256,16 +256,16 @@ big_number_t *big_number_sub_internal(
         pr--;
     }
     reverse_string(r, r_cap);
-    big_number_t *result = big_number_from_str(r, r_cap);
+    big_integer_t *result = big_integer_from_str(r, r_cap);
     free(r);
     free(b);
     free(a);
     return result;
 }
 
-big_number_t *big_number_sub(const big_number_t *bn_a, const big_number_t *bn_b) {
-    const size_t a_len = bn_a->length;
-    const size_t b_len = bn_b->length;
+big_integer_t *big_integer_sub(const big_integer_t *bi_a, const big_integer_t *bi_b) {
+    const size_t a_len = bi_a->length;
+    const size_t b_len = bi_b->length;
     errno = 0;
     bool is_both_equal = true;
     bool is_mod_a_bigger = false;
@@ -276,8 +276,8 @@ big_number_t *big_number_sub(const big_number_t *bn_a, const big_number_t *bn_b)
         is_mod_a_bigger = false;
         is_both_equal = false;
     } else {
-        const char *a = bn_a->number;
-        const char *b = bn_b->number;
+        const char *a = bi_a->number;
+        const char *b = bi_b->number;
         for (size_t i = 0; i < a_len; i++) {
             if (a[i] > b[i]) {
                 is_mod_a_bigger = true;
@@ -291,27 +291,27 @@ big_number_t *big_number_sub(const big_number_t *bn_a, const big_number_t *bn_b)
             }
         }
     }
-    const big_number_t ac = {
-        .capacity = bn_a->capacity, .number = bn_a->number, .is_negative = false, .length = bn_a->length
+    const big_integer_t ac = {
+        .capacity = bi_a->capacity, .number = bi_a->number, .is_negative = false, .length = bi_a->length
     };
-    const big_number_t bc = {
-        .capacity = bn_b->capacity, .number = bn_b->number, .is_negative = false, .length = bn_b->length
+    const big_integer_t bc = {
+        .capacity = bi_b->capacity, .number = bi_b->number, .is_negative = false, .length = bi_b->length
     };
     if (is_mod_a_bigger) {
-        big_number_t *result = big_number_sub_internal(&ac, &bc);
-        result->is_negative = bn_a->is_negative;
+        big_integer_t *result = big_integer_sub_internal(&ac, &bc);
+        result->is_negative = bi_a->is_negative;
         return result;
     }
-    big_number_t *result = big_number_sub_internal(&bc, &ac);
+    big_integer_t *result = big_integer_sub_internal(&bc, &ac);
     if (!is_both_equal) {
-        if (!bn_a->is_negative) {
-            if (!bn_b->is_negative) {
+        if (!bi_a->is_negative) {
+            if (!bi_b->is_negative) {
                 result->is_negative = true;
             } else {
                 result->is_negative = false;
             }
         } else {
-            if (!bn_b->is_negative) {
+            if (!bi_b->is_negative) {
                 result->is_negative = false;
             } else {
                 result->is_negative = true;

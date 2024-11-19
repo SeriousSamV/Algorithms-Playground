@@ -176,18 +176,18 @@ add_test(test_string_utils assert_string_utils)
 #endregion string_utils
 
 #region big_number
-add_library(big_number
-        src/utils/big_number/big_number.c
-        src/utils/big_number/big_number.h)
-target_include_directories(big_number PUBLIC src/utils/big_number)
-target_link_libraries(big_number
+add_library(big_integer
+        src/utils/big_integer/big_integer.c
+        src/utils/big_integer/big_integer.h)
+target_include_directories(big_integer PUBLIC src/utils/big_integer)
+target_link_libraries(big_integer
         PRIVATE nullptr_fix
         PUBLIC string_utils)
 
-add_executable(assert_big_number test/utils/big_number/assert_big_number.c)
-target_link_libraries(assert_big_number big_number)
+add_executable(assert_big_integer test/utils/big_number/assert_big_integer.c)
+target_link_libraries(assert_big_integer big_integer)
 
-add_test(test_big_number assert_big_number)
+add_test(test_big_integer assert_big_integer)
 #endregion big_number
 
 #region big_decimal
