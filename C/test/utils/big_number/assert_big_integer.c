@@ -4,6 +4,7 @@
 #include <string.h>
 // ReSharper disable CppUnusedIncludeDirective
 #include <stdbool.h>
+#include <stdio.h>
 // ReSharper restore CppUnusedIncludeDirective
 
 big_integer_t *big_integer_sub_internal(
@@ -365,9 +366,114 @@ void test_big_integer_sub() {
     big_integer_free(a16);
 }
 
+void test_big_integer_mul() {
+    big_integer_t *a1 = big_integer_from_str("100", 3);
+    big_integer_t *b1 = big_integer_from_str("2", 1);
+    big_integer_t *r1 = big_integer_mul(a1, b1);
+    assert(r1 != NULL);
+    assert(strcmp(r1->number, "200") == 0);
+    assert(r1->is_negative == false);
+    big_integer_free(r1);
+    big_integer_free(b1);
+    big_integer_free(a1);
+
+
+    big_integer_t *a2 = big_integer_from_str("0", 1);
+    big_integer_t *b2 = big_integer_from_str("100", 3);
+    big_integer_t *r2 = big_integer_mul(a2, b2);
+    assert(r2 != NULL);
+    assert(strcmp(r2->number, "0") == 0);
+    assert(r2->is_negative == false);
+    big_integer_free(r2);
+    big_integer_free(b2);
+    big_integer_free(a2);
+
+    big_integer_t *a3 = big_integer_from_str("123", 3);
+    big_integer_t *b3 = big_integer_from_str("456", 3);
+    big_integer_t *r3 = big_integer_mul(a3, b3);
+    assert(r3 != NULL);
+    printf("r3->number: %s but should be 56088\n", r3->number);
+    assert(strcmp(r3->number, "56088") == 0);
+    assert(r3->is_negative == false);
+    big_integer_free(r3);
+    big_integer_free(b3);
+    big_integer_free(a3);
+
+    big_integer_t *a4 = big_integer_from_str("999999", 6);
+    big_integer_t *b4 = big_integer_from_str("2", 1);
+    big_integer_t *r4 = big_integer_mul(a4, b4);
+    assert(r4 != NULL);
+    assert(strcmp(r4->number, "1999998") == 0);
+    assert(r4->is_negative == false);
+    big_integer_free(r4);
+    big_integer_free(b4);
+    big_integer_free(a4);
+
+    big_integer_t *a5 = big_integer_from_str("1000000000", 10);
+    big_integer_t *b5 = big_integer_from_str("1000000000", 10);
+    big_integer_t *r5 = big_integer_mul(a5, b5);
+    assert(r5 != NULL);
+    assert(strcmp(r5->number, "1000000000000000000") == 0);
+    assert(r5->is_negative == false);
+    big_integer_free(r5);
+    big_integer_free(b5);
+    big_integer_free(a5);
+
+    big_integer_t *a6 = big_integer_from_str("500", 3);
+    big_integer_t *b6 = big_integer_from_str("3000", 4);
+    big_integer_t *r6 = big_integer_mul(a6, b6);
+    assert(r6 != NULL);
+    assert(strcmp(r6->number, "1500000") == 0);
+    assert(r6->is_negative == false);
+    big_integer_free(r6);
+    big_integer_free(b6);
+    big_integer_free(a6);
+
+    big_integer_t *a7 = big_integer_from_str("1000000000", 10);
+    big_integer_t *b7 = big_integer_from_str("0", 1);
+    big_integer_t *r7 = big_integer_mul(a7, b7);
+    assert(r7 != NULL);
+    assert(strcmp(r7->number, "0") == 0);
+    assert(r7->is_negative == false);
+    big_integer_free(r7);
+    big_integer_free(b7);
+    big_integer_free(a7);
+
+    big_integer_t *a8 = big_integer_from_str("123456789", 9);
+    big_integer_t *b8 = big_integer_from_str("987654321", 9);
+    big_integer_t *r8 = big_integer_mul(a8, b8);
+    assert(r8 != NULL);
+    assert(strcmp(r8->number, "121932631112635269") == 0);
+    assert(r8->is_negative == false);
+    big_integer_free(r8);
+    big_integer_free(b8);
+    big_integer_free(a8);
+
+    big_integer_t *a9 = big_integer_from_str("-500", 4);
+    big_integer_t *b9 = big_integer_from_str("3000", 4);
+    big_integer_t *r9 = big_integer_mul(a9, b9);
+    assert(r9 != NULL);
+    assert(strcmp(r9->number, "1500000") == 0);
+    assert(r9->is_negative == true);
+    big_integer_free(r9);
+    big_integer_free(b9);
+    big_integer_free(a9);
+
+    big_integer_t *a10 = big_integer_from_str("-999999", 7);
+    big_integer_t *b10 = big_integer_from_str("-2", 2);
+    big_integer_t *r10 = big_integer_mul(a10, b10);
+    assert(r10 != NULL);
+    assert(strcmp(r10->number, "1999998") == 0);
+    assert(r10->is_negative == false);
+    big_integer_free(r10);
+    big_integer_free(b10);
+    big_integer_free(a10);
+}
+
 int main() {
     test_big_integer_add();
     test_big_integer_sub_internal();
     test_big_integer_sub();
+    test_big_integer_mul();
     return EXIT_SUCCESS;
 }

@@ -25,13 +25,11 @@ big_integer_t *big_integer_from_ll(long long number);
 
 big_integer_t *big_integer_from_ull(unsigned long long number);
 
-big_integer_t *big_integer_add(
-    const big_integer_t *restrict bi_a,
-    const big_integer_t *restrict bi_b);
+big_integer_t *big_integer_add( const big_integer_t *restrict bi_a, const big_integer_t *restrict bi_b);
 
-big_integer_t *big_integer_sub(
-    const big_integer_t *restrict bi_a,
-    const big_integer_t *restrict bi_b);
+big_integer_t *big_integer_sub(const big_integer_t *restrict bi_a, const big_integer_t *restrict bi_b);
+
+big_integer_t *big_integer_mul(const big_integer_t *restrict bi_a, const big_integer_t *restrict bi_b);
 
 void big_integer_free(big_integer_t *bi);
 

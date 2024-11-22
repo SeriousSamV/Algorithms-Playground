@@ -41,6 +41,10 @@ big_integer_t *big_integer_new(void) {
 
 big_integer_t *big_integer_from_str(const char *number, const size_t capacity) {
     if (number == NULL || capacity == 0) {
+        char error_msg[BUFSIZ];
+        snprintf(error_msg, BUFSIZ, "%s:%d %s: %s\n", __FILE_NAME__, __LINE__, __FUNCTION__,
+                 "arg is null or capacity in 0");
+        perror(error_msg);
         return nullptr;
     }
     big_integer_t *bi = malloc(sizeof(big_integer_t));
@@ -170,7 +174,7 @@ big_integer_t *big_integer_add(
     const bool is_b_negative = bi_b->is_negative;
     errno = 0;
     if ((is_a_negative && is_b_negative) || (!is_a_negative && !is_b_negative)) {
-        big_integer_t * result = big_number_add_internal(bi_a, bi_b);
+        big_integer_t *result = big_number_add_internal(bi_a, bi_b);
         result->is_negative = is_a_negative;
         return result;
     }
@@ -324,4 +328,67 @@ big_integer_t *big_integer_sub(const big_integer_t *bi_a, const big_integer_t *b
         result->is_negative = false;
     }
     return result;
+}
+
+big_integer_t *big_integer_mul_internal(
+    const big_integer_t *restrict const bi_a,
+    const big_integer_t *restrict const bi_b) {
+    const size_t a_len = bi_a->length;
+    const size_t b_len = bi_b->length;
+    const size_t r_cap = a_len + b_len;
+    char *const r = calloc(r_cap, sizeof(char));
+    char *pr = nullptr;
+    for (ssize_t i = a_len - 1; i >= 0; i--) { // NOLINT(*-narrowing-conversions)
+        unsigned int carry = 0;
+        pr = r + a_len - 1 - i;
+        const unsigned int va = (unsigned int) bi_a->number[i] - '0';
+        for (ssize_t j = b_len - 1; j >= 0; j--) { // NOLINT(*-narrowing-conversions)
+            const unsigned int vb = (unsigned int) bi_b->number[j] - '0';
+            const unsigned int r_val = va * vb + carry;
+            if (r_val >= 10) {
+                *pr++ = (char) (r_val % 10 + '0');
+                carry = r_val / 10 % 10;
+            } else {
+                *pr++ = (char) (r_val % 10 + '0');
+                carry = 0;
+            }
+        }
+        if (carry > 0) {
+            *pr = (char) (carry + '0');
+        }
+    }
+    size_t r_len = strnlen(r, r_cap);
+    while (r_len > 1 && r[r_len - 1] == '0') {
+        r[r_len - 1] = '\0';
+        r_len--;
+    }
+    reverse_string(r, r_cap);
+    big_integer_t *result = big_integer_from_str(r, r_len);
+    result->is_negative = bi_a->is_negative ^ bi_b->is_negative;
+    free(r);
+    return result;
+}
+
+big_integer_t *big_integer_mul(
+    const big_integer_t *restrict const bi_a,
+    const big_integer_t *restrict const bi_b) {
+    bool is_a_bigger = false;
+    if (bi_a->length > bi_b->length) {
+        is_a_bigger = true;
+    } else if (bi_b->length > bi_a->length) {
+        is_a_bigger = false;
+    } else {
+        const char *a = bi_a->number;
+        const char *b = bi_b->number;
+        for (size_t i = 0; i < bi_a->length; i++) {
+            if (a[i] > b[i]) {
+                is_a_bigger = true;
+                break;
+            }
+        }
+    }
+    if (is_a_bigger) {
+        return big_integer_mul_internal(bi_a, bi_b);
+    }
+    return big_integer_mul_internal(bi_b, bi_a);
 }
