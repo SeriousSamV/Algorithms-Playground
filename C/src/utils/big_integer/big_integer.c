@@ -335,7 +335,7 @@ big_integer_t *big_integer_mul_internal(
     const big_integer_t *restrict const bi_b) {
     const size_t a_len = bi_a->length;
     const size_t b_len = bi_b->length;
-    const size_t r_cap = a_len + b_len;
+    const size_t r_cap = a_len + b_len + 1;
     char *const r = calloc(r_cap, sizeof(char));
     char *pr = nullptr;
     for (ssize_t i = a_len - 1; i >= 0; i--) { // NOLINT(*-narrowing-conversions)
@@ -344,7 +344,7 @@ big_integer_t *big_integer_mul_internal(
         const unsigned int va = (unsigned int) bi_a->number[i] - '0';
         for (ssize_t j = b_len - 1; j >= 0; j--) { // NOLINT(*-narrowing-conversions)
             const unsigned int vb = (unsigned int) bi_b->number[j] - '0';
-            const unsigned int r_val = va * vb + carry;
+            const unsigned int r_val = va * vb + carry + (*pr >= '0' ? *pr - '0' : 0);
             if (r_val >= 10) {
                 *pr++ = (char) (r_val % 10 + '0');
                 carry = r_val / 10 % 10;

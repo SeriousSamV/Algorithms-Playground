@@ -367,6 +367,16 @@ void test_big_integer_sub() {
 }
 
 void test_big_integer_mul() {
+    big_integer_t *a = big_integer_from_str("99", 2);
+    big_integer_t *b = big_integer_from_str("99", 2);
+    big_integer_t *r = big_integer_mul(a, b);
+    assert(r != NULL);
+    assert(strcmp(r->number, "9801") == 0);
+    assert(r->is_negative == false);
+    big_integer_free(r);
+    big_integer_free(b);
+    big_integer_free(a);
+
     big_integer_t *a1 = big_integer_from_str("100", 3);
     big_integer_t *b1 = big_integer_from_str("2", 1);
     big_integer_t *r1 = big_integer_mul(a1, b1);
@@ -376,7 +386,6 @@ void test_big_integer_mul() {
     big_integer_free(r1);
     big_integer_free(b1);
     big_integer_free(a1);
-
 
     big_integer_t *a2 = big_integer_from_str("0", 1);
     big_integer_t *b2 = big_integer_from_str("100", 3);
@@ -392,7 +401,6 @@ void test_big_integer_mul() {
     big_integer_t *b3 = big_integer_from_str("456", 3);
     big_integer_t *r3 = big_integer_mul(a3, b3);
     assert(r3 != NULL);
-    printf("r3->number: %s but should be 56088\n", r3->number);
     assert(strcmp(r3->number, "56088") == 0);
     assert(r3->is_negative == false);
     big_integer_free(r3);
